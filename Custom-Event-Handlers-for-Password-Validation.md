@@ -1,13 +1,13 @@
 ---
 title: Custom Event Handlers for Password Validation
 intro: 'WSO2 Identity Server: Event Handlers + Java WatchService'
-short: something here
+short: A Custom Event Handler Implementation
 category: WSO2
 tags: ['wso2', 'wso2-identity-server', 'event-handlers']
 author: Athiththan
 weight: -1
-updated: 2019-01-17
-date: '2019-06-19T22:12:03.284Z'
+updated: 2019-06-15
+date: '2019-06-15T09:30:03.284Z'
 ---
 
 ## A Story Guide
@@ -89,11 +89,5 @@ sh wso2server.sh
 ### Test
 
 After server startup, navigate to `https://<IP_ADDRESS>:9443/dashboard` and log in using `admin` as both username and password. Click on the _“View Details”_ button on the _“Change Password”_ section and type your current password and enter the new password as one of the defective passwords and try on.
-
-<p class="quote text-secondary">
-    Prepare your extraordinary core (- brain) to process different events exceptionally without exceptions
-    <br/>
-    — Athiththan
-</p>
 
 <hr class="three--dots"/>
