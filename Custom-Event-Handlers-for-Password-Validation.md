@@ -90,4 +90,27 @@ sh wso2server.sh
 
 After server startup, navigate to `https://<IP_ADDRESS>:9443/dashboard` and log in using `admin` as both username and password. Click on the _“View Details”_ button on the _“Change Password”_ section and type your current password and enter the new password as one of the defective passwords and try on.
 
+## GitHub
+
+<br>
+
+<a class="ul-disabled" href="https://github.com/athiththan11/Defective-Password-Validator">
+    <div class="card">
+        <div class="card-horizontal">
+            <div class="card-body py-4 px-5">
+                <h4 class="card-title mt-4">Defective Password Validator</h4>
+                <p>Defective password validation using WSO2 Event Handlers extension</p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        athiththan11
+                    </small>
+                </footer>
+            </div>
+            <div class="img-square-wrapper">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+            </div>
+        </div>
+    </div>
+</a>
+
 <hr class="three--dots"/>
