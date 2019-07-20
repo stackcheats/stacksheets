@@ -14,7 +14,7 @@
 
 <h1 align='center'>stacksheets</h1>
 
-<p align='center'>a collection stories, blogs & cheats used by stackcheats</p>
+<p align='center'>a collection of stories, blogs & cheats used by stackcheats</p>
 
 <br>
 
