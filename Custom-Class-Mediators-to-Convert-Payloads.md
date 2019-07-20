@@ -283,7 +283,7 @@ After successful execution, we can observe the response as follows
 <a class="ul-disabled" href="https://github.com/athiththan11/Revamp-Mediator">
     <div class="card">
         <div class="card-horizontal">
-            <div class="card-body py-4 px-5">
+            <div class="card-body py-2 px-5">
                 <h4 class="card-title mt-4">Revamp Mediator</h4>
                 <p>A custom mediation logic to convert payload attribute values using WSO2 Class Mediator extension</p>
                 <footer class="blockquote-footer">
