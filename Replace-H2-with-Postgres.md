@@ -12,21 +12,27 @@ date: '2019-07-21T12:00:00.284Z'
 
 ## Docker: Postgres
 
-### Docker
+### Pull
 
-### Postgres
+> Prerequisites: Docker installed in your environment. You can follow the Docker docs to get it done.
 
-#### Pull
+Follow the given steps to set up Postgres using Docker in your dev environments. For this demo, we will be using **Postgres - 9.6.14** and **WSO2 Identity Server 5.7**.
+
+The following command is used to pull the Postgres image from DockerHub for the tag 9.6.14
 
 ```shell
 docker pull postgres
 ```
 
-#### Run
+### Run
+
+After a successful pull, execute the below command to create and run a docker container for our Postgres DB image
 
 ```shell
 docker run --name <CONTAINER_NAME> -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql <IMAGE>
 ```
+
+We can use the following command to move into the PSQL terminal session
 
 ```shell
 docker run --name postgres-container -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
@@ -42,7 +48,7 @@ docker start <CONTAINER_NAME>
 docker stop <CONTAINER_NAME>
 ```
 
-#### PSQL
+### PSQL
 
 ```shell
 docker exec -ti <CONTAINER_NAME> psql -h <HOST> -U <USERNAME>
@@ -52,12 +58,90 @@ docker exec -ti <CONTAINER_NAME> psql -h <HOST> -U <USERNAME>
 docker exec -ti postgres-container psql -h localhost -U postgres
 ```
 
-## WSO2 Identity Server
+## Configurations
+
+### Postgres
+
+To replace the default packaged H2 database with Postgres, initially, we have to create the databases and tables in Postgres. Find and execute the following SQL scripts to create and set up all necessary tables and indexes.
+
+* `<IS>/dbscripts/postgresql.sql`
+* `<IS>/dbscripts/identity/postgresql.sql`
+* `<IS>/dbscripts/identity/uma/postgresql.sql`
+* `<IS>/dbscripts/identity/stored-procedures/postgre/postgresql.sql`
+* `<IS>/dbscripts/consent/postgresql.sql`
+
+### WSO2 Identity Server
 
 Download Postgres driver from [here](https://jdbc.postgresql.org/download.html)
 
-### MasterSource
+#### Master DataSource
 
-### Registry
+```xml
+<!-- master-datasources.xml -->
+<datasource>
+    <name>WSO2_CARBON_POSTGRES_DB</name>
+    <description>The datasource used for registry and user manager</description>
+    <jndiConfig>
+        <name>jdbc/WSO2CarbonPostgresDB</name>
+    </jndiConfig>
+    <definition type="RDBMS">
+        <configuration>
+            <url>jdbc:postgresql://{host | localhost}:{port | 5432}/wso2carbon</url>
+            <username>{username | postgres}</username>
+            <password>{password | hydrogen}</password>
+            <driverClassName>org.postgresql.Driver</driverClassName>
+            <maxActive>80</maxActive>
+            <maxWait>60000</maxWait>
+            <minIdle>5</minIdle>
+            <testOnBorrow>true</testOnBorrow>
+            <validationQuery>SELECT 1; COMMIT</validationQuery>
+            <defaultAutoCommit>true</defaultAutoCommit>
+            <validationInterval>30000</validationInterval>
+        </configuration>
+    </definition>
+</datasource>
+```
 
-### Identity
+#### Identity
+
+```xml
+<!-- identity.xml -->
+<JDBCPersistenceManager>
+        <DataSource>
+            <!-- Include a data source name (jndiConfigName) from the set of data
+                sources defined in master-datasources.xml -->
+            <!-- <Name>jdbc/WSO2CarbonDB</Name> -->
+
+            <Name>jdbc/WSO2CarbonPostgresDB</Name>
+        </DataSource>
+        ...
+```
+
+#### Registry
+
+```xml
+<!-- registry.xml -->
+<dbConfig name="wso2registry">
+    <dataSource>jdbc/WSO2CarbonDB</dataSource>
+</dbConfig>
+
+<dbConfig name="govregistry">
+    <dataSource>jdbc/WSO2CarbonPostgresDB</dataSource>
+</dbConfig>
+<remoteInstance url="https://{host | localhost}:{port | 9443|/registry">
+    <id>gov</id>
+    <cacheId>{username | postgres}@jdbc:postgresql://{host | localhost}:{port | 5432}/wso2carbon</cacheId>
+    <dbConfig>govregistry</dbConfig>
+    <readOnly>false</readOnly>
+    <enableCache>true</enableCache>
+    <registryRoot>/</registryRoot>
+</remoteInstance>
+<mount path="/_system/governance" overwrite="true">
+    <instanceId>gov</instanceId>
+    <targetPath>/_system/governance</targetPath>
+</mount>
+<mount path="/_system/config" overwrite="true">
+    <instanceId>gov</instanceId>
+    <targetPath>/_system/config</targetPath>
+</mount>
+```
