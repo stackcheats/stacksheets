@@ -38,6 +38,8 @@ We can use the following command to move into the PSQL terminal session
 docker run --name postgres-container -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres
 ```
 
+Given below are the basic `start` and `stop` commands for Docker containers
+
 #### Start & Stop
 
 ```shell
@@ -62,7 +64,9 @@ docker exec -ti postgres-container psql -h localhost -U postgres
 
 ### Postgres
 
-To replace the default packaged H2 database with Postgres, initially, we have to create the databases and tables in Postgres. Find and execute the following SQL scripts to create and set up all necessary tables and indexes.
+To replace the default packaged H2 database with Postgres, initially, we have to create the databases and tables in Postgres. Find and execute the following PostgreSQL scripts to create and set up all necessary tables and indexes.
+
+> You can use either any database tools like DBeaver or you can straightaway execute them using PSQL terminal
 
 * `<IS>/dbscripts/postgresql.sql`
 * `<IS>/dbscripts/identity/postgresql.sql`
@@ -72,7 +76,20 @@ To replace the default packaged H2 database with Postgres, initially, we have to
 
 ### WSO2 Identity Server
 
-Download Postgres driver from [here](https://jdbc.postgresql.org/download.html)
+After setting up the databases, tables and indexes, now we have to install the Postgres JDBC connector (driver) inside our WSO2 Identity Server.
+Download the Postgres driver from [here](https://jdbc.postgresql.org/download.html), and place it inside the `<IS>/repository/components/lib` directory.
+
+Now, we have to configure our database connection settings in the Identity Server to connect to the Postgres. Make changes to the following XML files to change the connection from default H2 database to our newly created Postgres database.
+
+* [`<IS>/repository/conf/datasources/master-datasources.xml`](#master-datasource)
+* [`<IS>/repository/conf/identity/identity.xml`](#identity)
+* [`<IS>/repository/conf/registry.xml`](#registry)
+
+> We will be changing the user store from the default LDAP server to the JDBC store
+
+* [`<IS>/repository/conf/user-mgt.xml`](#user-management)
+
+> The following configurations and xml snippets have template connection strings. For example: `jdbc:postgresql://{host | localhost}:{port | 5432}/wso2carbon`. Replace and change the `host` and `port` segments with respective values.
 
 #### Master DataSource
 
@@ -145,3 +162,16 @@ Download Postgres driver from [here](https://jdbc.postgresql.org/download.html)
     <targetPath>/_system/config</targetPath>
 </mount>
 ```
+
+#### User Management
+
+```xml
+<Configuration>
+    ...
+    <!-- <Property name="dataSource">jdbc/WSO2CarbonDB</Property> -->
+
+    <Property name="dataSource">jdbc/WSO2CarbonPostgresDB</Property>
+</Configuration>
+```
+
+Comment the LDAP User-Store-Manager configurations and uncomment the JDBC User-Store-Manager. This will change our default LDAP user store with JDBC user store.
