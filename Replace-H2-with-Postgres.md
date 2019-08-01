@@ -69,7 +69,7 @@ docker start postgres-9.6.14
 
 #### PSQL
 
-Execute the following command to enter the PSQL terminal session run the create query to create a database named `wso2postgres`
+Execute the following command to enter the PSQL terminal session and run the create query to create a database named `wso2postgres`
 
 ```shell
 docker exec -ti postgres-9.6.14 psql -h localhost -U postgres
@@ -79,7 +79,7 @@ docker exec -ti postgres-9.6.14 psql -h localhost -U postgres
 create database wso2postgres;
 ```
 
-After a successful creation, try to connect to the `wso2postgres` database using the following command
+After successful creation, try to connect to the `wso2postgres` database using the following command
 
 ```psql
 \c wso2postgres;
@@ -117,7 +117,7 @@ Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
 
 ![Postgres Connection Configurations](assets/replace-h2-postgres/postgres-connection-configurations.png)
 
-Click on `Test Connection` to test the database connection and if success then click `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above listed postgresql scripts in the DBeaver.
+Click on `Test Connection` to test the database connection and if success then click the `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above-listed PostgreSQL scripts in the DBeaver.
 
 Select the database connection and the Postgres schema if not selected by default and click `Execute SQL Script` to execute the script. Do this for all above-mentioned [PostgreSQL scripts](#postgres).
 
