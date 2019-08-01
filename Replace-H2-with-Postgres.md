@@ -26,12 +26,12 @@ docker pull postgres:9.6.14
 
 ### Run
 
-After a successful pull, execute the below command to create and run a docker container for our pulled Postgres image. Replace the `<CONTAINER_NAME>` tag with your preferred name.
+After a successful pull, execute the below command to create and run a docker container for our pulled Postgres image. Replace the `<CONTAINER_NAME>` tag with your preferred name or use `postgres-9.6.14` as the default value.
 
 > You can change the Postgres password by changing the `POSTGRES_PASSWORD` value from `hydrogen` to any preferred secured password
 
 ```shell
-docker run --name <CONTAINER_NAME> -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres:9.6.14
+docker run --name <CONTAINER_NAME || postgres-9.6.14> -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres:9.6.14
 ```
 
 > Basic commands to `start` and `stop` a Docker container
@@ -39,12 +39,12 @@ docker run --name <CONTAINER_NAME> -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d
 > -   `docker start <CONTAINER_NAME>` to start a container
 > -   `docker stop <CONTAINER_NAME>` to stop a running container
 
-### PSQL
+### PSQL Terminal
 
 Use the following command to hop into the PSQL terminal session.
 
 ```shell
-docker exec -ti <CONTAINER_NAME> psql -h localhost -U postgres
+docker exec -ti <CONTAINER_NAME || postgres-9.6.14> psql -h localhost -U postgres
 ```
 
 ## Configurations
@@ -53,7 +53,7 @@ docker exec -ti <CONTAINER_NAME> psql -h localhost -U postgres
 
 To replace the default packaged H2 database with Postgres, initially, we have to create the databases and tables in Postgres. Find and execute the following PostgreSQL scripts to create and set up all necessary tables and indexes.
 
-> You can use either any database tools like DBeaver or you can straightaway execute them using PSQL terminal
+> You can use either any database tools like DBeaver (Jump to [DBeaver](#dbeaver)) or you can straightaway execute them using PSQL terminal (Jump to [PSQL](#psql))
 
 -   `<IS>/dbscripts/postgresql.sql`
 -   `<IS>/dbscripts/identity/postgresql.sql`
@@ -61,11 +61,73 @@ To replace the default packaged H2 database with Postgres, initially, we have to
 -   `<IS>/dbscripts/identity/stored-procedures/postgre/postgresql.sql`
 -   `<IS>/dbscripts/consent/postgresql.sql`
 
+Start the Postgres container (if not started before) using the following command
+
+```shell
+docker start postgres-9.6.14
+```
+
+#### PSQL
+
+Execute the following command to enter the PSQL terminal session run the create query to create a database named `wso2postgres`
+
+```shell
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres
+```
+
+```sql
+create database wso2postgres;
+```
+
+After a successful creation, try to connect to the `wso2postgres` database using the following command
+
+```psql
+\c wso2postgres;
+```
+
+Next, quite the terminal session using `\q` command and copy the `dbscripts` folder from the `<IS_HOME>` path to our `postgres-9.6.14` container volume to execute all related scripts using the Docker PSQL terminal.
+
+```shell
+docker cp <IS_HOME>/dbscripts postgres-9.6.14:/
+```
+
+and run the following commands one by one to execute the scripts
+
+* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/postgresql.sql`
+* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/postgresql.sql`
+* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/uma/postgresql.sql`
+* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/stored-procedures/postgre/postgresql.sql`
+* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/consent/postgresql.sql`
+
+After a successful connection, execute the above-mentioned SQL scripts to create related tables and indexes. But, before executing them, we have to copy the `dbscripts` folder to the related container volume to execute the script using PSQL terminal. Execute the following command to copy the `dbscripts` folder from the `<IS_HOME>` path to our `postgres-9.6.14` container volume.
+
+#### DBeaver
+
+> Prerequisites: DBeaver installed in your environment. You can follow the [DBeaver](https://dbeaver.io) site.
+
+Open DBeaver and create a new database connection. Select `PostgreSQL` from the list and click `Next`.
+
+![Select Database](assets/replace-h2-with-postgres/select-database.png)
+
+Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
+
+> Please change and use related values for the `Host`, `Port`, `Database`, `User` and `Password` fields if those are different from mentioned default values.
+>
+> If you have not installed any PostgreSQL driver for DBeaver, it will prompt you to follow a couple of instructions to install necessary drivers to work with Postgres databases and connections
+
+![Postgres Connection Configurations](assets/replace-h2-postgres/postgres-connection-configurations.png)
+
+Click on `Test Connection` to test the database connection and if success then click `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above listed postgresql scripts in the DBeaver.
+
+Select the database connection and the Postgres schema if not selected by default and click `Execute SQL Script` to execute the script. Do this for all above-mentioned [PostgreSQL scripts](#postgres).
+
+![Execute Postgres Script](assets/replace-h2-with-postgres/execute-postgres-scripts.png)
+
 ### WSO2 Identity Server
 
-After setting up the databases, now we have to install the Postgres JDBC connector (driver) inside our WSO2 Identity Server. Download the Postgres driver from [here](https://jdbc.postgresql.org/download.html), and place it inside the `<IS>/repository/components/lib` directory.
+After setting up the databases, now we have to install the Postgres JDBC connector (driver) for our WSO2 Identity Server. Download the Postgres driver from [here](https://jdbc.postgresql.org/download.html), copy and place the `jar` file inside the `<IS>/repository/components/lib` directory.
 
-Now, we have to configure our database connection settings in the Identity Server to connect to the Postgres. Make changes to the following XML files to swap the connection from default H2 database to our Postgres database.
+Next, we have to configure our database connection settings in the Identity Server to connect to our Postgres source. Make changes to the following XML files to swap the connection from default H2 database to our Postgres database.
 
 -   [`<IS>/repository/conf/datasources/master-datasources.xml`](#master-datasource)
 -   [`<IS>/repository/conf/identity/identity.xml`](#identity)
