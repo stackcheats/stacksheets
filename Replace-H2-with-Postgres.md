@@ -6,8 +6,8 @@ category: WSO2
 tags: ['wso2', 'wso2-identity-server', 'h2', 'postgres']
 author: Athiththan
 weight: -1
-updated: 2019-07-21
-date: '2019-07-21T12:00:00.284Z'
+updated: 2019-08-02
+date: '2019-08-02T12:12:00.284Z'
 ---
 
 ## Docker: Postgres
@@ -93,11 +93,17 @@ docker cp <IS_HOME>/dbscripts postgres-9.6.14:/
 
 and run the following commands one by one to execute the scripts
 
-* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/postgresql.sql`
-* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/postgresql.sql`
-* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/uma/postgresql.sql`
-* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/stored-procedures/postgre/postgresql.sql`
-* `docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/consent/postgresql.sql`
+```shell
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/postgresql.sql
+-----
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/postgresql.sql
+-----
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/uma/postgresql.sql
+-----
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/stored-procedures/postgre/postgresql.sql
+-----
+docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/consent/postgresql.sql
+```
 
 After a successful connection, execute the above-mentioned SQL scripts to create related tables and indexes. But, before executing them, we have to copy the `dbscripts` folder to the related container volume to execute the script using PSQL terminal. Execute the following command to copy the `dbscripts` folder from the `<IS_HOME>` path to our `postgres-9.6.14` container volume.
 
@@ -115,7 +121,7 @@ Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
 >
 > If you have not installed any PostgreSQL driver for DBeaver, it will prompt you to follow a couple of instructions to install necessary drivers to work with Postgres databases and connections
 
-![Postgres Connection Configurations](assets/replace-h2-postgres/postgres-connection-configurations.png)
+![Postgres Connection Configurations](assets/replace-h2-with-postgres/postgres-connection-configurations.png)
 
 Click on `Test Connection` to test the database connection and if success then click the `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above-listed PostgreSQL scripts in the DBeaver.
 
@@ -124,6 +130,8 @@ Select the database connection and the Postgres schema if not selected by defaul
 ![Execute Postgres Script](assets/replace-h2-with-postgres/execute-postgres-scripts.png)
 
 ### WSO2 Identity Server
+
+> Below described steps and guides are based on fresh-pack installation. If you have any pre-stored data inside the H2 database, then you have to migrate them to the new data-source which is not covered in this topic.
 
 After setting up the databases, now we have to install the Postgres JDBC connector (driver) for our WSO2 Identity Server. Download the Postgres driver from [here](https://jdbc.postgresql.org/download.html), copy and place the `jar` file inside the `<IS>/repository/components/lib` directory.
 
@@ -141,7 +149,7 @@ Next, we have to configure our database connection settings in the Identity Serv
 
 #### Master DataSource
 
-Add the following datasource configuration below the H2 configuration.
+Add the following datasource configuration below the default H2 configuration.
 
 ```xml
 <!-- master-datasources.xml -->
@@ -153,7 +161,7 @@ Add the following datasource configuration below the H2 configuration.
     </jndiConfig>
     <definition type="RDBMS">
         <configuration>
-            <url>jdbc:postgresql://localhost:5432/wso2carbon</url>
+            <url>jdbc:postgresql://localhost:5432/wso2postgres</url>
             <username>postgres</username>
             <password>hydrogen</password>
             <driverClassName>org.postgresql.Driver</driverClassName>
@@ -171,6 +179,8 @@ Add the following datasource configuration below the H2 configuration.
 
 #### Identity
 
+Change the data-source in `repository/conf/identity/identity.xml` with the Postgres JNDI configuration name.
+
 ```xml
 <!-- identity.xml -->
 <JDBCPersistenceManager>
@@ -186,6 +196,10 @@ Add the following datasource configuration below the H2 configuration.
 
 #### Registry
 
+The following changes are made to mount the registries with our newly created Postgres data-source.
+
+> Don't change the default `wso2registry` configurations unless if you want to. Add new registry mounting configurations below the default configurations.
+
 ```xml
 <!-- registry.xml -->
 <dbConfig name="wso2registry">
@@ -197,7 +211,7 @@ Add the following datasource configuration below the H2 configuration.
 </dbConfig>
 <remoteInstance url="https://localhost:9443/registry">
     <id>gov</id>
-    <cacheId>postgres@jdbc:postgresql://localhost:5432/wso2carbon</cacheId>
+    <cacheId>postgres@jdbc:postgresql://localhost:5432/wso2postgres</cacheId>
     <dbConfig>govregistry</dbConfig>
     <readOnly>false</readOnly>
     <enableCache>true</enableCache>
@@ -215,7 +229,9 @@ Add the following datasource configuration below the H2 configuration.
 
 #### User Management
 
-Comment the existing `WSO2CarbonDB` datasource property tag and place the `WSO2CarbonPostgresDB` property tag inside the `<Configuration>` element as described below
+> Below described steps are to change the default LDAP user-store to JDBC user-store. You can skip the following changes, if you want to keep the default LDAP user-store as out-of-the-box.
+
+Comment the existing `WSO2CarbonDB` data source property tag and place the `WSO2CarbonPostgresDB` property tag inside the `<Configuration>` element as described below
 
 ```xml
 <Configuration>
@@ -226,4 +242,20 @@ Comment the existing `WSO2CarbonDB` datasource property tag and place the `WSO2C
 </Configuration>
 ```
 
-Further, comment the LDAP user store manger configurations and uncomment the JDBC user store manager. This is to change our default LDAP user store with JDBC user store.
+Further, comment the LDAP user store manager configurations and uncomment the JDBC user store manager. This will route our default LDAP user store with JDBC user store.
+
+## Run & Test
+
+Start the WSO2 Identity Server by navigating to the `<IS>/bin` folder and execute the following command based on your environment
+
+```shell
+# linux env
+./wso2server.sh
+
+# windows env
+./wso2server.bat
+```
+
+The server will start and configure the platform to work with new configurations. After successful startup, bring up your favourite browser and navigate to `https://localhost:9443/carbon` and enter `admin` as both username and password.
+
+<hr class="three--dots"/>
