@@ -149,7 +149,7 @@ Next, we have to configure our database connection settings in the Identity Serv
 
 #### Master DataSource
 
-Add the following datasource configuration below the default H2 configuration.
+Add the following data source configuration below the default H2 configuration.
 
 ```xml
 <!-- master-datasources.xml -->
@@ -229,7 +229,7 @@ The following changes are made to mount the registries with our newly created Po
 
 #### User Management
 
-> Below described steps are to change the default LDAP user-store to JDBC user-store. You can skip the following changes, if you want to keep the default LDAP user-store as out-of-the-box.
+> Below described steps are to change the default LDAP user-store to JDBC user-store. You can skip the following changes if you want to keep the default LDAP user-store as out-of-the-box.
 
 Comment the existing `WSO2CarbonDB` data source property tag and place the `WSO2CarbonPostgresDB` property tag inside the `<Configuration>` element as described below
 
@@ -256,6 +256,6 @@ Start the WSO2 Identity Server by navigating to the `<IS>/bin` folder and execut
 ./wso2server.bat
 ```
 
-The server will start and configure the platform to work with new configurations. After successful startup, bring up your favourite browser and navigate to `https://localhost:9443/carbon` and enter `admin` as both username and password.
+The server will start and configure the platform to work with new configurations. After a successful startup, bring up your favorite browser and navigate to `https://localhost:9443/carbon` and enter `admin` as both username and password.
 
 <hr class="three--dots"/>
