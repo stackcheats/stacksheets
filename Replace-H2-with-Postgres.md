@@ -6,8 +6,8 @@ category: WSO2
 tags: ['wso2', 'wso2-identity-server', 'h2', 'postgres']
 author: Athiththan
 weight: -1
-updated: 2019-08-02
-date: '2019-08-02T12:12:00.284Z'
+updated: 2019-08-03
+date: '2019-08-03T10:18:00.284Z'
 ---
 
 ## Docker: Postgres
@@ -123,7 +123,7 @@ Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
 
 ![Postgres Connection Configurations](assets/replace-h2-with-postgres/postgres-connection-configurations.png)
 
-Click on `Test Connection` to test the database connection and if success then click the `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above-listed PostgreSQL scripts in the DBeaver.
+Click on `Test Connection` to test the database connection and if successful then click on `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above-listed PostgreSQL scripts in the DBeaver.
 
 Select the database connection and the Postgres schema if not selected by default and click `Execute SQL Script` to execute the script. Do this for all above-mentioned [PostgreSQL scripts](#postgres).
 
