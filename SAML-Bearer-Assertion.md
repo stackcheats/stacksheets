@@ -6,8 +6,8 @@ category: WSO2
 tags: ['saml-bearer-assertion', 'saml', 'oauth2', 'wso2']
 author: Athiththan
 weight: -1
-updated: 2019-07-29
-date: '2019-07-29T23:10:03.284Z'
+updated: 2019-08-11
+date: '2019-08-11T19:20:03.284Z'
 ---
 
 ## Brief Introduction
@@ -32,10 +32,16 @@ Both OAuth2 and SAML have similar concepts and terms in between them.
 
 Stackcheats is a private blog platform which uses **SAML SSO** to authenticate and authorize different writers and bloggers. Since Stackcheats has been a private blog platform, they have a new requirement on their development road-map to access writer's technical blogs from their  Medium accounts.
 
-However, the Medium platform has been using **OAuth2** mechanism to authorize different users and writers to access and view various medium posts. A tech-developer named Athiththan have been requested to develop a solution.
+However, the Medium platform has been using **OAuth2** mechanism to authorize different users and writers to access and view various medium posts.
 
 > OAuth2 and SAML 2.0 are two different frameworks used to authorize and authenticate (OAuth doesn't authenticate).
 
 This is where the SAML Bearer Assertion grant comes to play. The SAML Bearer Assertion grant is used to exchange the acquired SAML Assertion for an OAuth2 access token.
 
 To simply put, SAML Bearer Assertion grant-flow is very similar to the Authorization code grant-flow in OAuth, wherein SAML Bearer Assertion flow, a SAML Assertion is used instead of a cryptography code to gain an OAuth2 access token.
+
+Given below is a simple diagram of how SAML Bearer Assertion flow works.
+
+![SAML2 Bearer Assertion Flow](assets/saml-bearer-assertion/SAML2&#32;Bearer&#32;Assertion.png)
+
+## Experiential
