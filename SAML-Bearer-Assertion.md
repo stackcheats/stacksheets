@@ -46,4 +46,30 @@ Given below is a simple diagram of how SAML Bearer Assertion flow works.
 
 ## Experiential
 
-For practical, we will be using WSO2 API Manager and a simple Passport-SAML express application to retrieve a SAML2 Bearer Assertion and to exchange to an OAuth2 access token and finally to invoke an API defined in the API Manager.
+For practical, we will be using **WSO2 API Manager** along with **WSO2 Identity Server** and a simple Passport-SAML express application to retrieve a SAML2 Bearer Assertion and to exchange to an OAuth2 access token and finally to invoke an API defined in the API Manager.
+
+As first step, we'll configure our WSO2 Identity Server with the API Manager to function as a Federated Identity Provider. Then, we'll setup our Passport SAML application with the Identity Server as a service provider to gain SAML2 Token.
+
+### WSO2 API Manager
+
+Follow the steps to add our WSO2 Identity Server as a Federated Identity Provider in our API Manager.
+
+Start the API Manager server by directing to `<APIM>/bin` folder and execute the startup command based on your environment ...
+
+```shell
+# linux env
+./wso2server.sh
+
+# windows env
+./wso2server.bat
+```
+
+And login to the management console (`https://localhost:9443/carbon`), using `admin` for both the username and password.
+
+Click on `Add` under `Identity Providers` accordian as following
+
+![Add Identity Provider](assets/saml-bearer-assertion/add-identity-provider.png)
+
+![Add new Identity Provider](assets/saml-bearer-assertion/add-new-identity-provider.png)
+
+### WSO2 Identity Server
