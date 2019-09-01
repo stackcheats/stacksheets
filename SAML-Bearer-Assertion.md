@@ -42,6 +42,8 @@ To simply put, SAML Bearer Assertion grant-flow is very similar to the Authoriza
 
 Given below is a simple diagram of how SAML Bearer Assertion flow works.
 
-![SAML2 Bearer Assertion Flow](assets/saml-bearer-assertion/SAML2&#32;Bearer&#32;Assertion.png)
+![SAML2 Bearer Assertion Flow](assets/saml-bearer-assertion/saml2-bearer-assertion.png)
 
 ## Experiential
+
+For practical, we will be using WSO2 API Manager and a simple Passport-SAML express application to retrieve a SAML2 Bearer Assertion and to exchange to an OAuth2 access token and finally to invoke an API defined in the API Manager.
