@@ -165,8 +165,6 @@ Test the exposed REST API service using the below cURL commands. Given below are
 
 `gist:athiththan11/96ef52ab35dea69562119183cd2d3bda#wso2-trilogy-ei-curl.http`
 
---- Gist
-
 ## WSO2 API Manager
 
 Thereafter, we’ll configure a WSO2 API Manager instance to manage the API lifecycle, traffic, subscriptions, and analytics of our exposed REST service.
@@ -257,12 +255,12 @@ Test the exposed REST APIs using the below cURL commands. Given below are a coup
 
 <br>
 
-<a class="ul-disabled" href="https://github.com/athiththan11/Passport-SAML-WSO2">
+<a class="ul-disabled" href="https://github.com/athiththan11/RepoDeWS">
     <div class="card">
         <div class="card-horizontal">
             <div class="card-body py-4 px-5">
-                <h4 class="card-title mt-4">Passport SAML WSO2</h4>
-                <p>A sample express application with Passport-SAML for WSO2 SAML2 SSO</p>
+                <h4 class="card-title mt-4">RepoDeWS</h4>
+                <p>A Simple Spring Boot (SOAP) Web Service</p>
                 <footer class="blockquote-footer">
                     <small class="text-muted">
                         athiththan11
