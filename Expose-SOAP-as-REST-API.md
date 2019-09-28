@@ -10,6 +10,8 @@ updated: 2019-09-28
 date: '2019-09-28T14:35:00.284Z'
 ---
 
+## Intro
+
 In this medium, we will be looking on how to expose a legacy web-service / SOAP service as REST APIs using both WSO2 API Manager (2.6.0) and Enterprise Integrator (6.5.0).
 
 > **Why EI & API Manager? Can’t we do it using either one of them?**
