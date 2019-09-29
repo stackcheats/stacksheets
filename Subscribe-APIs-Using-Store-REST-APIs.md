@@ -1,0 +1,432 @@
+---
+title: 'Subscribe APIs Using Store REST APIs'
+intro: 'WSO2 API Manager : Publisher & Store REST APIs'
+short: A Quick Guide on using WSO2 API Manager's Publisher & Store REST APIs to Create and Subscribe
+category: WSO2
+tags: ['wso2', 'wso2-api-manager', 'store', 'publisher', 'rest']
+author: Athiththan
+weight: -1
+updated: 2019-09-29
+date: '2019-09-29T10:38:00.284Z'
+---
+
+## Intro
+
+We will be creating APIs and subscribing and consuming them using RESTful APIs which are exposed by the **WSO2 API Manager** (2.6) platform.
+
+The RESTful APIs of API Manager gives an extended platform to the end-users and developers to create APIs, create an application and to subscribe to them using REST clients without touching any UIs of API Manager. This simply makes life easier when creating hundreds of APIs and testing the platform.
+
+In this demo, we will be covering and performing the following subjects …
+
+* Dynamic Client Registration
+* Create REST API
+* Create Application
+* Subscribe
+* Generate Keys and Access Token
+* Consume API
+
+> You can find more details on exposed APIs and Docs [here](https://docs.wso2.com/display/AM260/RESTful+APIs). We will be using API Docs of API Manager v2.6. Also please find the **Postman collection** used for this demo at the end of this article
+
+## Dynamic Client Registration
+
+Before executing any of the REST API, we have to invoke the dynamic client registration endpoint and want to get an `Access Token` to further continue and use the exposed APIs.
+
+### Server Startup
+
+Download and start the WSO2 API Manager by directing to `<APIM>/bin` folder and executing the following
+
+```shell
+# linux env
+sh wso2server.sh
+
+# windows env
+wso2server.bat
+```
+
+### Client Registration
+
+After a successful startup, use the following endpoint reference to register a dynamic client
+
+```http
+POST: https://localhost:9443/client-registration/v0.14/register
+Authorization: Basic <Base64(admin:admin)>
+Content-Type: application/json
+
+{
+  "callbackUrl": "localhost",
+  "clientName": "rest_api_demo",
+  "owner": "admin",
+  "grantType": "password refresh_token",
+  "saasApp": true
+}
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:9443/client-registration/v0.14/register \
+  -H 'Authorization: Basic YWRtaW46YWRtaW4=' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "callbackUrl": "localhost",
+    "clientName": "rest_api_demo",
+    "owner": "admin",
+    "grantType": "password refresh_token",
+    "saasApp": true
+}'
+```
+
+Markdown the `clientId` and `clientSecret` values from the response to generate an access token using the token endpoint.
+
+### Token Generation
+
+Execute the following endpoint reference to generate an access token using the obtained `clientId` and `clientSecret` values.
+
+```http
+POST: https://localhost:8243/token
+Authorization: Basic <Base64(ClientID:ClientSecret)>
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+username=admin
+password=admin
+scope=apim:api_view apim:api_create apim:api_publish apim:subscribe
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:8243/token \
+  -H 'Authorization: Basic <Base64(ClientID:ClientSecret)>' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=password&username=admin&password=admin&scope=apim%3Aapi_view%20apim%3Aapi_create%20apim%3Aapi_publish%20apim%3Asubscribe'
+```
+
+Now we have successfully generated an access token to use with our Store and Publisher REST APIs. Copy the generated access token from the response and keep it for future executions.
+
+## Create REST API
+
+We will be using the exact request as defined [here](https://docs.wso2.com/display/AM260/apidocs/publisher/#!/operations#APIIndividual#apisPost) to create a test API for our demo. Our demo API will be the default shipped `PizzaShackAPI`. Please find the request endpoint reference below
+
+```http
+POST https://localhost:9443/api/am/publisher/v0.14/apis Authorization: Bearer <Access Token>  
+{
+  "name": "PizzaShackAPI",
+  "description": "This document describe a RESTFul API for Pizza Shack online pizza delivery store.\r\n",
+  "context": "/pizzashack",
+  "version": "1.0.0",
+  "provider": "admin",
+  "apiDefinition": "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"string\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",    
+  "wsdlUri": null,
+  "status": "CREATED",
+  "responseCaching": "Disabled",
+  "cacheTimeout": 300,
+  "destinationStatsEnabled": false,
+  "isDefaultVersion": false,
+  "type": "HTTP",
+  "transport":["http","https"],
+  "tags": ["pizza"],
+  "tiers": ["Unlimited"],
+  "maxTps":{
+    "sandbox": 5000,
+    "production": 1000
+  },
+  "visibility": "PUBLIC",
+  "visibleRoles": [],
+  "endpointConfig": "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"sandbox_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}",
+  "endpointSecurity":{
+    "username": "user",
+    "type": "basic",
+    "password": "pass"
+  },
+  "gatewayEnvironments": "Production and Sandbox",
+  "sequences":[
+    {
+      "name":"json_validator",
+      "type": "in"
+    },
+    {
+      "name":"log_out_message",
+      "type": "out"
+    }
+  ],
+  "subscriptionAvailability": null,
+  "subscriptionAvailableTenants": [],
+  "businessInformation":{
+    "businessOwnerEmail": "marketing@pizzashack.com",
+    "technicalOwnerEmail": "architecture@pizzashack.com",
+    "technicalOwner": "John Doe",
+    "businessOwner": "Jane Roe"
+  },
+  "corsConfiguration":{
+    "accessControlAllowOrigins": ["*"],
+    "accessControlAllowHeaders":["authorization","Access-Control-Allow-Origin","Content-Type","SOAPAction"],
+    "accessControlAllowMethods":["GET","PUT","POST","DELETE","PATCH","OPTIONS"],
+    "accessControlAllowCredentials": false,
+    "corsConfigurationEnabled": false
+  }
+}
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:9443/api/am/publisher/v0.14/apis \
+  -H 'Authorization: Bearer <Access Token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+   "name": "PizzaShackAPI",
+   "description": "This document describe a RESTFul API for Pizza Shack online pizza delivery store.\r\n",
+   "context": "/pizzashack",
+   "version": "1.0.0",
+   "provider": "admin",
+   "apiDefinition": "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"string\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",
+   "wsdlUri": null,
+   "status": "CREATED",
+   "responseCaching": "Disabled",
+   "cacheTimeout": 300,
+   "destinationStatsEnabled": false,
+   "isDefaultVersion": false,
+   "type": "HTTP",
+   "transport":    [
+      "http",
+      "https"
+   ],
+   "tags": ["pizza"],
+   "tiers": ["Unlimited"],
+   "maxTps":    {
+      "sandbox": 5000,
+      "production": 1000
+   },
+   "visibility": "PUBLIC",
+   "visibleRoles": [],
+   "endpointConfig": "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"sandbox_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}",
+   "endpointSecurity":    {
+      "username": "user",
+      "type": "basic",
+      "password": "pass"
+   },
+   "gatewayEnvironments": "Production and Sandbox",
+   "sequences": [{"name":"json_validator","type": "in"},{"name":"log_out_message","type": "out"}],
+   "subscriptionAvailability": null,
+   "subscriptionAvailableTenants": [],
+   "businessInformation":    {
+      "businessOwnerEmail": "marketing@pizzashack.com",
+      "technicalOwnerEmail": "architecture@pizzashack.com",
+      "technicalOwner": "John Doe",
+      "businessOwner": "Jane Roe"
+   },
+   "corsConfiguration":    {
+      "accessControlAllowOrigins": ["*"],
+      "accessControlAllowHeaders":       [
+         "authorization",
+         "Access-Control-Allow-Origin",
+         "Content-Type",
+         "SOAPAction"
+      ],
+      "accessControlAllowMethods":       [
+         "GET",
+         "PUT",
+         "POST",
+         "DELETE",
+         "PATCH",
+         "OPTIONS"
+      ],
+      "accessControlAllowCredentials": false,
+      "corsConfigurationEnabled": false
+   }
+}'
+```
+
+After successful execution, copy the `id` value from the response. We will be using the `id` value to identify our Pizza Shack API when subscribing to an application.
+
+Now we have to change the status of our created API from `CREATED` to `PUBLISHED` state.
+
+```http
+POST: https://localhost:9443/api/am/publisher/v0.14/apis/change-lifecycle?apiId=<API Id Value>&action=Publish
+Authorization: Bearer <Access Token>
+```
+
+curl command
+
+```curl
+curl -X POST \
+  'https://localhost:9443/api/am/publisher/v0.14/apis/change-lifecycle?apiId=<API ID>&action=Publish' \
+  -H 'Authorization: Bearer <Access Token>' \
+```
+
+## Create Application
+
+Before subscribing an API, we have to create an application for it with the appropriate throttling tiers/subscription level.
+
+> We can also use the DefaultApplication from the Store to subscribe to an API, but for the demo, we will be creating a new application
+
+Below presented is the request endpoint reference to create a new application.
+
+```http
+POST: https://localhost:9443/api/am/store/v0.14/applications
+Authorization: Bearer <Access Token>
+Content-Type: application/json
+
+{
+  "throttlingTier": "Unlimited",
+  "description": "Demo App",
+  "name": "DemoApp",
+  "callbackUrl": "http://localhost"
+}
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:9443/api/am/store/v0.14/applications \
+  -H 'Authorization: Bearer <Access Token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "throttlingTier": "Unlimited",
+    "description": "Demo App",
+    "name": "DemoApp",
+    "callbackUrl": "http://localhost"
+}'
+```
+
+Note down the `applicationId` value from the successful response.
+
+## Subscribe
+
+At last, now we are in the section of subscribing to our created `PizzaShackAPI` with the above-generated `DemoApp`.
+
+For subscription, we can use either the `id` value of our created API or the unique name of our `PizzaShackAPI`. Using the `id` value of an API is a straightforward execution. But sometimes, using the unique name will be more helpful when you know the minimal of an API.
+
+* If a user called `admin` has created an API named `DemoAPI` with version `v1.0.0` then the unique name will be as `admin-DemoAPI-v1.0.0`
+* If a user called `foo` from a tenant named `bar` has created an API named `TenantAPI` with the version `1.0` then the unique name will be as `foo-AT-bar.com-TenantAPI-1.0`
+
+```http
+POST: https://localhost:9443/api/am/store/v0.14/subscriptions
+Authorization: Bearer <Access Token>
+
+{
+  "tier": "Unlimited",
+  "apiIdentifier": "<API ID Value || API Unique Name>",
+  "applicationId": "<Application ID Value>"
+}
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:9443/api/am/store/v0.14/subscriptions \
+  -H 'Authorization: Bearer <Access Token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "tier": "Unlimited",
+  "apiIdentifier": "admin-PizzaShackAPI-1.0.0",
+  "applicationId": "Application ID"
+}'
+```
+
+## Generate Keys
+
+Next, we will be generating Production Keys for our `DemoApp` to generate an access token for API consumption.
+
+```http
+POST: https://localhost:9443/api/am/store/v0.14/applications/generate-keys?applicationId=<Application ID Value>
+Authorization: Bearer <Access Token>
+
+{
+  "validityTime": "3600",
+  "keyType": "PRODUCTION",
+  "accessAllowDomains": [ "ALL" ],
+  "scopes": [ "am_application_scope", "default" ],
+  "supportedGrantTypes": [ "urn:ietf:params:oauth:grant-type:saml2-bearer", "iwa:ntlm", "refresh_token", "client_credentials", "password" ]
+}
+```
+
+curl command
+
+```curl
+curl -X POST \
+  'https://localhost:9443/api/am/store/v0.14/applications/generate-keys?applicationId=<Application ID>' \
+  -H 'Authorization: Bearer <Access Token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "validityTime": "3600",
+  "keyType": "PRODUCTION",
+  "accessAllowDomains": [ "ALL" ],
+  "scopes": [ "am_application_scope", "default" ],
+  "supportedGrantTypes": [ "urn:ietf:params:oauth:grant-type:saml2-bearer", "iwa:ntlm", "refresh_token", "client_credentials", "password" ]
+}'
+```
+
+Note down both the `consumerKey` and `consumerSecret` values to generate an Access Token.
+
+```http
+POST: https://localhost:8243/token
+Authorization: Basic <Base64(ConsumerKey:ConsumerSecret)>
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+username=admin
+password=admin
+scope=default
+```
+
+curl command
+
+```curl
+curl -X POST \
+  https://localhost:8243/token \
+  -H 'Authorization: Basic <Base64(ConsumerKey:ConsumerSecret)>' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=password&username=admin&password=admin&scope=default'
+```
+
+Note the `access_token` value to invoke and consumer our Pizza Shack API
+
+## Consume & Test
+
+At last, now we are going to invoke and consume our created Pizza Shack API using the below request endpoint reference with the above-generated access token.
+
+```http
+GET: https://localhost:8243/pizzashack/1.0.0/menu
+Authorization: Beaer <Access Token>
+```
+
+curl command
+
+```curl
+curl -X GET \
+  https://localhost:8243/pizzashack/1.0.0/menu \
+  -H 'Authorization: Bearer <Access Token>' \
+```
+
+After all these struggles, We have successfully created an API, application and subscribed and invoked them and achieved our goals.
+
+I know it is hard to manage and remember these curl commands and you need a way to organize them. Therefore, please find the **Postman REST API collection** of this demo to make life easier.
+
+## Postman Collection
+
+<br>
+
+<a class="ul-disabled" href="https://drive.google.com/file/d/1Ug7eQJugVFu0x4tFnbc4-X_60oJmXXzs/view?usp=sharing&source=post_page-----54e94cd6c2ea----------------------">
+    <div class="card">
+        <div class="card-horizontal">
+            <div class="card-body py-4 px-5">
+                <h4 class="card-title mt-4">Subscribe-API-Using-Store-REST-APIs.postman_collection.json</h4>
+                <p>Postman Collection</p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        athiththan11
+                    </small>
+                </footer>
+            </div>
+        </div>
+    </div>
+</a>
+
+<hr class="three--dots"/>
