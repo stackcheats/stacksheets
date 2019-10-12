@@ -8,6 +8,7 @@ author: Athiththan
 weight: -1
 updated: 2019-07-20
 date: '2019-07-20T09:30:03.284Z'
+cover: covers/saml-sso-with-passport--cover.jpeg
 ---
 
 This post narrates on how-to enable and register a service provider for SAML SSO using WSO2 Identity Server and to develop a simple Express-based web application with Passport-SAML component to support and authenticate the users via SAML SSO.

@@ -8,6 +8,7 @@ author: Athiththan
 weight: -1
 updated: 2019-09-28
 date: '2019-09-28T14:35:00.284Z'
+cover: covers/expose-soap-as-rest-apis--cover.png
 ---
 
 ## Intro
