@@ -38,7 +38,7 @@ The AbstractEventHandler contains a method named handleEvent() which gets trigge
 
 Given below is the implementation to validate the given password against a list of defective passwords. The given implementation reads all the defective passwords from a text file named passwords.txt which is placed inside the `/<IS_HOME>/deployments/server/defective` folder.
 
-> For testing purposes, the given implementation can be modified to work with pre-defined list of defective passwords using ArrayList<>.
+> For testing purposes, the given implementation can be modified to work with pre-defined list of defective passwords using ArrayList.
 
 `gist:athiththan11/91f041fb6285235d2708580e914ce13c#DefaultDefectivePasswordValidator.java`
 
@@ -92,7 +92,7 @@ After server startup, navigate to `https://<IP_ADDRESS>:9443/dashboard` and log 
 
 ## GitHub
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/Defective-Password-Validator">
     <div class="card">
@@ -107,7 +107,7 @@ After server startup, navigate to `https://<IP_ADDRESS>:9443/dashboard` and log 
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>

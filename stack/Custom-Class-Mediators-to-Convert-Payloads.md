@@ -152,7 +152,7 @@ Create a maven quick-start project and replace the dependencies with the followi
 
 Clone or download the custom-developed [maven-archetype](https://github.com/athiththan11/WSO2-Mediators-Maven-Archetype) and run the following command to build and install the archetype locally on your machine to generate boilerplates for our custom class mediators.
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/WSO2-Mediators-Maven-Archetype">
     <div class="card">
@@ -167,13 +167,13 @@ Clone or download the custom-developed [maven-archetype](https://github.com/athi
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>
 </a>
 
-<br>
+<br />
 
 ```shell
 mvn clean install
@@ -278,7 +278,7 @@ After successful execution, we can observe the response as follows
 
 ## GitHub
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/Revamp-Mediator">
     <div class="card">
@@ -293,10 +293,10 @@ After successful execution, we can observe the response as follows
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>
 </a>
 
-<hr class="three--dots"/>
+<hr class="three--dots" />

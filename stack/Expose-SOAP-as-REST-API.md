@@ -26,7 +26,7 @@ For demo purposes, I have implemented a mock [Developer Management Web Service](
 
 **Let’s dive into the demo …**
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/RepoDeWS">
     <div class="card">
@@ -41,7 +41,7 @@ For demo purposes, I have implemented a mock [Developer Management Web Service](
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>
@@ -257,7 +257,7 @@ Test the exposed REST APIs using the below cURL commands. Given below are a coup
 
 ## GitHub
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/RepoDeWS">
     <div class="card">
@@ -272,7 +272,7 @@ Test the exposed REST APIs using the below cURL commands. Given below are a coup
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>

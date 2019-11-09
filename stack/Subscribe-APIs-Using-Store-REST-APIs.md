@@ -412,7 +412,7 @@ I know it is hard to manage and remember these curl commands and you need a way 
 
 ## Postman Collection
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://drive.google.com/file/d/1Ug7eQJugVFu0x4tFnbc4-X_60oJmXXzs/view?usp=sharing&source=post_page-----54e94cd6c2ea----------------------">
     <div class="card">

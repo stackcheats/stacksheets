@@ -212,7 +212,7 @@ Navigate to `http://localhost:3000/app/logout` to log-out from the SAML SSO sess
 
 ## GitHub
 
-<br>
+<br />
 
 <a class="ul-disabled" href="https://github.com/athiththan11/Passport-SAML-WSO2">
     <div class="card">
@@ -227,7 +227,7 @@ Navigate to `http://localhost:3000/app/logout` to log-out from the SAML SSO sess
                 </footer>
             </div>
             <div class="img-square-wrapper">
-                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="">
+                <img class="rounded mb-0" width="220.172" src="https://avatars3.githubusercontent.com/u/29927177?s=460&v=4" alt="" />
             </div>
         </div>
     </div>
