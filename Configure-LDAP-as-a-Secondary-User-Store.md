@@ -8,7 +8,11 @@ author: Athiththan
 weight: -1
 updated: 2019-09-08
 date: '2019-09-08T16:25:00.284Z'
+background: '#dae9d0'
+cover: covers/configure-LDAP-as-a-secondary-user-store--cover.png
 ---
+
+## Intro
 
 This post illustrates how to add an LDAP user-store as a secondary user-store in WSO2 API Manager (in almost every WSO2 Product).
 

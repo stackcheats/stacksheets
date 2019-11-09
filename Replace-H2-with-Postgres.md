@@ -8,6 +8,8 @@ author: Athiththan
 weight: -1
 updated: 2019-08-03
 date: '2019-08-03T10:18:00.284Z'
+background: '#fdc99f'
+cover: covers/replace-h2-with-postgres--cover.png
 ---
 
 ## Docker: Postgres
