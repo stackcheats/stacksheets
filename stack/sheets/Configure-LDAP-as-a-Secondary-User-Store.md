@@ -9,7 +9,7 @@ weight: -1
 updated: 2019-09-08
 date: '2019-09-08T16:25:00.284Z'
 background: '#dae9d0'
-cover: covers/configure-LDAP-as-a-secondary-user-store--cover.png
+cover: ../covers/configure-LDAP-as-a-secondary-user-store--cover.png
 ---
 
 ## Intro
@@ -58,7 +58,7 @@ Start the server by executing the following command based on your environment
 
 And login to the management console by directing to [`https://localhost:9444/carbon`](https://localhost:9444/carbon) and enter `admin` as both the username and password. Next select `Add` under `User Stores` section in `Main` tab.
 
-![Add User Store in WSO2 API Manager (2.6.0)](assets/configure-ldap-as-a-secondary-user-store/add-user-store-api-manager.png)
+![Add User Store in WSO2 API Manager (2.6.0)](../assets/configure-ldap-as-a-secondary-user-store/add-user-store-api-manager.png)
 
 Enter the inputs as follows …
 
@@ -75,11 +75,11 @@ Enter the inputs as follows …
 
 > Please enter relavant configuration values and properties if your LDAP configurations are different from the above-mentioned
 
-![User Store Configurations](assets/configure-ldap-as-a-secondary-user-store/user-store-configurations.png)
+![User Store Configurations](../assets/configure-ldap-as-a-secondary-user-store/user-store-configurations.png)
 
 Click on `Add` to save and add the user-store in WSO2 API Manager. The following alert box will appear if the user-store is added correctly.
 
-![Successful Alert Box](assets/configure-ldap-as-a-secondary-user-store/successful-alert-box.png)
+![Successful Alert Box](../assets/configure-ldap-as-a-secondary-user-store/successful-alert-box.png)
 
 ## Run & Test
 
@@ -87,11 +87,11 @@ Direct to [`https://localhost:9444/carbon`](https://localhost:9444/carbon) and s
 
 You will see a similar page as follows …
 
-![Users List in WSO2 API Manager](assets/configure-ldap-as-a-secondary-user-store/user-list-in-api-manager.png)
+![Users List in WSO2 API Manager](../assets/configure-ldap-as-a-secondary-user-store/user-list-in-api-manager.png)
 
 Select `View Roles` of `IS/admin` user and click on `Permissions` of `IS/admin` role in the next page. Thereafter, select theLogin permission in the listed permission tree.
 
-![Permission Tree of IS/admin Role](assets/configure-ldap-as-a-secondary-user-store/permission-tree.png)
+![Permission Tree of IS/admin Role](../assets/configure-ldap-as-a-secondary-user-store/permission-tree.png)
 
 And select Update to update the permission tree. Now, logout from the carbon console and again Sign-in using the following credentials …
 

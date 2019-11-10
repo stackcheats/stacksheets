@@ -9,7 +9,7 @@ weight: -1
 updated: 2019-08-03
 date: '2019-08-03T10:18:00.284Z'
 background: '#fdc99f'
-cover: covers/replace-h2-with-postgres--cover.png
+cover: ../covers/replace-h2-with-postgres--cover.png
 ---
 
 ## Docker: Postgres
@@ -115,7 +115,7 @@ After a successful connection, execute the above-mentioned SQL scripts to create
 
 Open DBeaver and create a new database connection. Select `PostgreSQL` from the list and click `Next`.
 
-![Select Database](assets/replace-h2-with-postgres/select-database.png)
+![Select Database](../assets/replace-h2-with-postgres/select-database.png)
 
 Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
 
@@ -123,13 +123,13 @@ Enter `wso2postgres` for the `Database` field and use `hydrogen` as `Password`.
 >
 > If you have not installed any PostgreSQL driver for DBeaver, it will prompt you to follow a couple of instructions to install necessary drivers to work with Postgres databases and connections
 
-![Postgres Connection Configurations](assets/replace-h2-with-postgres/postgres-connection-configurations.png)
+![Postgres Connection Configurations](../assets/replace-h2-with-postgres/postgres-connection-configurations.png)
 
 Click on `Test Connection` to test the database connection and if successful then click on `Finish` to finish the connection configuration process. The created connection will be listed under the `Database Navigator` panel (on the left-side navigation panel). Navigate to `File` -> `Open File ...` and select and open the above-listed PostgreSQL scripts in the DBeaver.
 
 Select the database connection and the Postgres schema if not selected by default and click `Execute SQL Script` to execute the script. Do this for all above-mentioned [PostgreSQL scripts](#postgres).
 
-![Execute Postgres Script](assets/replace-h2-with-postgres/execute-postgres-scripts.png)
+![Execute Postgres Script](../assets/replace-h2-with-postgres/execute-postgres-scripts.png)
 
 ### WSO2 Identity Server
 

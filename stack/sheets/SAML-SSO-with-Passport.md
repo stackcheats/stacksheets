@@ -9,7 +9,7 @@ weight: -1
 updated: 2019-07-20
 date: '2019-07-20T09:30:03.284Z'
 background: '#ffe5cc'
-cover: covers/saml-sso-with-passport--cover.jpeg
+cover: ../covers/saml-sso-with-passport--cover.jpeg
 ---
 
 ## Intro
@@ -65,7 +65,7 @@ Provide …
 * Service Provider Name: SampleExpressApp
 * Description: Any valid description of the service provider
 
-![Add New Service Provider](assets/saml-sso-with-passport/add_new_service_provider_01.png)
+![Add New Service Provider](../assets/saml-sso-with-passport/add_new_service_provider_01.png)
 
 And click *Register* to register and create a new service provider. Afterward, the management console will display you the following screen to configure claim configuration, inbound authentication configurations and etc.
 
@@ -81,7 +81,7 @@ For the demo, we will be selecting the following claims
 
 And choose `http://wso2.org/claims/emailaddress` as the *Subject Claim URI*.
 
-![Claim configurations](assets/saml-sso-with-passport/claim_configurations.png)
+![Claim configurations](../assets/saml-sso-with-passport/claim_configurations.png)
 
 Next, expand the *Inbound Authentication Configuration (accordion)* and click on *SAML2 Web SSO Configuration* and select *Configure* to configure SAML web SSO for our implemented express application.
 
@@ -100,7 +100,7 @@ Configure the SAML SSO as follows …
 * Enable Attribute Profile: True
 * Include Attributes in the Response Always: True
 
-![SAML SSO configurations](assets/saml-sso-with-passport/saml_sso_configurations.png)
+![SAML SSO configurations](../assets/saml-sso-with-passport/saml_sso_configurations.png)
 
 And select *Register* to register your SAML SSO configurations and the management console will prompt you to the previous configuration screen. Leave other configurations as it is and click on *Update*.
 
@@ -150,11 +150,11 @@ Open the Identity Server and navigate to *Main (Tab) -> Identity (Section) -> Se
 
 In the Basic Information panel, select the `Choose File` button which is associated with the *Application Certificate* field. Choose the above-created `wso2carbon.pem` file and open.
 
-![Application certificate configurations](assets/saml-sso-with-passport/application_certificate_configurations.png)
+![Application certificate configurations](../assets/saml-sso-with-passport/application_certificate_configurations.png)
 
 Next, expand the *Inbound Authentication Configuration (accordion)* and click on *SAML2 Web SSO Configuration* and select Edit to update our SAML web SSO configurations. Enable signature validation in authentication requests and logout requests.
 
-![Enable signature validation](assets/saml-sso-with-passport/enable_signature_validation.png)
+![Enable signature validation](../assets/saml-sso-with-passport/enable_signature_validation.png)
 
 Click *Update* and *Update* again to update the service provider configurations.
 
@@ -198,15 +198,15 @@ Open your favorite browser and navigate to `http://localhost:3000/app`. The brow
 
 >For this demo, you can use `admin` as both the username and password to sign in with the WSO2 Identity Server
 
-![WSO2 Identity Server: Login Page for SAML](assets/saml-sso-with-passport/idp_login_page.png)
+![WSO2 Identity Server: Login Page for SAML](../assets/saml-sso-with-passport/idp_login_page.png)
 
 After presenting the login credentials, the Identity Server will prompt a user consent page to either approve or deny requested claims. Choose *Select All* and *Approve*.
 
-![WSO2 Identity Server: User Consent Page](assets/saml-sso-with-passport/idp_consent_page.png)
+![WSO2 Identity Server: User Consent Page](../assets/saml-sso-with-passport/idp_consent_page.png)
 
 After successful authentication, the browser will redirect and displays you the logged-in page of our express application.
 
-![Successful log-in](assets/saml-sso-with-passport/sp_logged_page.png)
+![Successful log-in](../assets/saml-sso-with-passport/sp_logged_page.png)
 
 Navigate to `http://localhost:3000/app/logout` to log-out from the SAML SSO session.
 

@@ -8,7 +8,7 @@ author: Athiththan
 weight: -1
 updated: 2019-09-29
 date: '2019-09-29T10:38:00.284Z'
-cover: covers/subscribe-apis-using-store-rest-apis--cover.png
+cover: ../covers/subscribe-apis-using-store-rest-apis--cover.png
 ---
 
 ## Intro
