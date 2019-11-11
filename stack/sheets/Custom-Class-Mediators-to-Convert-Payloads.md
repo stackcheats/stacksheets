@@ -175,7 +175,7 @@ Clone or download the custom-developed [maven-archetype](https://github.com/athi
 
 <br />
 
-```shell
+```bash
 mvn clean install
 ```
 
@@ -183,7 +183,7 @@ Then, execute the following command to generate a Maven project (boilerplate)
 
 > Change the command according to your required Group ID and Artifact ID arguments
 
-```shell
+```bash
 mvn archetype:generate  -DarchetypeGroupId=com.athiththan.wso2     \
                         -DarchetypeArtifactId=wso2-mediators       \
                         -DarchetypeVersion=1.0.0                   \
@@ -209,7 +209,7 @@ A simple class mediator implementation to convert the name attribute from `mediu
 
 Execute the following command from our project root folder to build and package our custom mediator implementation.
 
-```shell
+```bash
 mvn clean package
 ```
 
@@ -252,13 +252,13 @@ If you have implemented your class mediator implementation in a Java class named
 
 After pasting our `CM-IMPL_JAR` and editing the `_TokenAPI_.xml` file, start the WSO2 API Manager instance using the following command.
 
-```shell
+```bash
 sh wso2server.sh
 ```
 
 Use the following cURL command to execute the Token Endpoint of the WSO2 API Manager instance by replacing the `<Your Host>` tag with respective host value
 
-```shell
+```bash
 curl -k --request POST \
     -d '{"post":"WSO2 Class Mediator: Convert Payload","dev":{"name":"medium"}}' \
     -H "Content-Type: application/json" \

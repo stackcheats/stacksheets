@@ -22,7 +22,7 @@ Follow the given steps to set up Postgres using Docker in your dev environments.
 
 Start the Docker service and execute the following command to pull the Postgres (9.6.14) image from [DockerHub](https://hub.docker.com/_/postgres)
 
-```shell
+```bash
 docker pull postgres:9.6.14
 ```
 
@@ -32,7 +32,7 @@ After a successful pull, execute the below command to create and run a docker co
 
 > You can change the Postgres password by changing the `POSTGRES_PASSWORD` value from `hydrogen` to any preferred secured password
 
-```shell
+```bash
 docker run --name <CONTAINER_NAME || postgres-9.6.14> -e POSTGRES_PASSWORD=hydrogen -p 5432:5432 -d -v $HOME/docker/volumes/postgres:/var/lib/postgresql postgres:9.6.14
 ```
 
@@ -45,7 +45,7 @@ docker run --name <CONTAINER_NAME || postgres-9.6.14> -e POSTGRES_PASSWORD=hydro
 
 Use the following command to hop into the PSQL terminal session.
 
-```shell
+```bash
 docker exec -ti <CONTAINER_NAME || postgres-9.6.14> psql -h localhost -U postgres
 ```
 
@@ -65,7 +65,7 @@ To replace the default packaged H2 database with Postgres, initially, we have to
 
 Start the Postgres container (if not started before) using the following command
 
-```shell
+```bash
 docker start postgres-9.6.14
 ```
 
@@ -73,7 +73,7 @@ docker start postgres-9.6.14
 
 Execute the following command to enter the PSQL terminal session and run the create query to create a database named `wso2postgres`
 
-```shell
+```bash
 docker exec -ti postgres-9.6.14 psql -h localhost -U postgres
 ```
 
@@ -89,13 +89,13 @@ After successful creation, try to connect to the `wso2postgres` database using t
 
 Next, quite the terminal session using `\q` command and copy the `dbscripts` folder from the `<IS_HOME>` path to our `postgres-9.6.14` container volume to execute all related scripts using the Docker PSQL terminal.
 
-```shell
+```bash
 docker cp <IS_HOME>/dbscripts postgres-9.6.14:/
 ```
 
 and run the following commands one by one to execute the scripts
 
-```shell
+```bash
 docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/postgresql.sql
 -----
 docker exec -ti postgres-9.6.14 psql -h localhost -U postgres -d wso2postgres -f /dbscripts/identity/postgresql.sql
@@ -250,7 +250,7 @@ Further, comment the LDAP user store manager configurations and uncomment the JD
 
 Start the WSO2 Identity Server by navigating to the `<IS>/bin` folder and execute the following command based on your environment
 
-```shell
+```bash
 # linux env
 ./wso2server.sh
 

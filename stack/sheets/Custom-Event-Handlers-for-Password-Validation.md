@@ -72,7 +72,7 @@ Navigate to <IS_HOME>/repository/conf/identity directory and open the identity-e
 
 You can clone or download the custom event-handler implementation project done by Athiththan from GitHub and build it using the following command …
 
-```shell
+```bash
 mvn clean package
 ```
 
@@ -82,7 +82,7 @@ After a successful build, copy the `defective-password-validator-1.0.0.jar` arti
 
 Start your WSO2 Identity Server by navigating to the `<IS_HOME>/bin` folder and executing the following command …
 
-```shell
+```bash
 sh wso2server.sh
 ```
 

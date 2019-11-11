@@ -26,7 +26,7 @@ Download both [WSO2 API Manager (2.6.0)](https://wso2.com/api-management/) and [
 
 Extract the binary artifact of WSO2 Identity Server and navigate to `[IS]/bin` folder and execute the following command based on your environment to start the server …
 
-```shell
+```bash
 # linux env
 ./wso2server.sh
 
@@ -48,7 +48,7 @@ Open and edit the `<Offset>` element with the following …
 
 Start the server by executing the following command based on your environment
 
-```shell
+```bash
 # linux env
 ./wso2server.sh
 

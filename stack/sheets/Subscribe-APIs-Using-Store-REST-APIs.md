@@ -36,9 +36,9 @@ Before executing any of the REST API, we have to invoke the dynamic client regis
 
 Download and start the WSO2 API Manager by directing to `<APIM>/bin` folder and executing the following
 
-```shell
+```bash
 # linux env
-sh wso2server.sh
+foo@bar:~$ sh wso2server.sh
 
 # windows env
 wso2server.bat
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:9443/client-registration/v0.14/register \
   -H 'Authorization: Basic YWRtaW46YWRtaW4=' \
@@ -97,7 +97,7 @@ scope=apim:api_view apim:api_create apim:api_publish apim:subscribe
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:8243/token \
   -H 'Authorization: Basic <Base64(ClientID:ClientSecret)>' \
@@ -112,7 +112,10 @@ Now we have successfully generated an access token to use with our Store and Pub
 We will be using the exact request as defined [here](https://docs.wso2.com/display/AM260/apidocs/publisher/#!/operations#APIIndividual#apisPost) to create a test API for our demo. Our demo API will be the default shipped `PizzaShackAPI`. Please find the request endpoint reference below
 
 ```http
-POST https://localhost:9443/api/am/publisher/v0.14/apis Authorization: Bearer <Access Token>  
+POST: https://localhost:9443/api/am/publisher/v0.14/apis
+Authorization: Bearer <Access Token>
+Content-Type: application/json
+
 {
   "name": "PizzaShackAPI",
   "description": "This document describe a RESTFul API for Pizza Shack online pizza delivery store.\r\n",
@@ -173,7 +176,7 @@ POST https://localhost:9443/api/am/publisher/v0.14/apis Authorization: Bearer <A
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:9443/api/am/publisher/v0.14/apis \
   -H 'Authorization: Bearer <Access Token>' \
@@ -253,7 +256,7 @@ Authorization: Bearer <Access Token>
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   'https://localhost:9443/api/am/publisher/v0.14/apis/change-lifecycle?apiId=<API ID>&action=Publish' \
   -H 'Authorization: Bearer <Access Token>' \
@@ -282,7 +285,7 @@ Content-Type: application/json
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:9443/api/am/store/v0.14/applications \
   -H 'Authorization: Bearer <Access Token>' \
@@ -309,6 +312,7 @@ For subscription, we can use either the `id` value of our created API or the uni
 ```http
 POST: https://localhost:9443/api/am/store/v0.14/subscriptions
 Authorization: Bearer <Access Token>
+Content-Type: application/json
 
 {
   "tier": "Unlimited",
@@ -319,7 +323,7 @@ Authorization: Bearer <Access Token>
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:9443/api/am/store/v0.14/subscriptions \
   -H 'Authorization: Bearer <Access Token>' \
@@ -338,6 +342,7 @@ Next, we will be generating Production Keys for our `DemoApp` to generate an acc
 ```http
 POST: https://localhost:9443/api/am/store/v0.14/applications/generate-keys?applicationId=<Application ID Value>
 Authorization: Bearer <Access Token>
+Content-Type: application/json
 
 {
   "validityTime": "3600",
@@ -350,7 +355,7 @@ Authorization: Bearer <Access Token>
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   'https://localhost:9443/api/am/store/v0.14/applications/generate-keys?applicationId=<Application ID>' \
   -H 'Authorization: Bearer <Access Token>' \
@@ -379,7 +384,7 @@ scope=default
 
 curl command
 
-```curl
+```bash
 curl -X POST \
   https://localhost:8243/token \
   -H 'Authorization: Basic <Base64(ConsumerKey:ConsumerSecret)>' \
@@ -400,7 +405,7 @@ Authorization: Beaer <Access Token>
 
 curl command
 
-```curl
+```bash
 curl -X GET \
   https://localhost:8243/pizzashack/1.0.0/menu \
   -H 'Authorization: Bearer <Access Token>' \

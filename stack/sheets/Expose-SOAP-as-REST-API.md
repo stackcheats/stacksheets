@@ -68,13 +68,13 @@ Repo
 
 Clone or download the project from GitHub, and execute the following command from the root folder to start the web-service server
 
-```shell
+```bash
 mvn spring-boot:run
 ```
 
 If you don’t have maven installed, then use the following to start the server
 
-```shell
+```bash
 ./mvnw spring-boot:run
 ```
 
@@ -98,7 +98,7 @@ Follow this https://www.shellhacks.com/get-ssl-certificate-from-server-site-url-
 
 > Navigate to `<EI>/repository/resources/security` folder and execute the following command. Enter `wso2carbon` as the password if it prompts
 
-```shell
+```bash
 keytool -importcert -file <path to crt> -keystore client-truststore.jks -alias hydrogen.com
 ```
 
@@ -106,7 +106,7 @@ keytool -importcert -file <path to crt> -keystore client-truststore.jks -alias h
 
 Start the EI instance by navigating to the `/bin` folder and execute the following command based on your environment …
 
-```shell
+```bash
 # linux env
 sh integrator.sh
 
@@ -179,7 +179,7 @@ In advance, we need to configure a port off-set for our API Manager instance, th
 
 Navigate to `<APIM>/repository/conf/carbon.xml` and change the `<Offset>` value from `0` to `1`. And, start the API Manager instance by navigating to `<APIM>/bin` folder and execute the following command based on your environment …
 
-```shell
+```bash
 # linux env
 sh wso2server.sh
 

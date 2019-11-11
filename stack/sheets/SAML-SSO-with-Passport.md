@@ -132,13 +132,13 @@ To validate both authentication request and logout requests, we need to add rele
 
 To export the certificate from the key-store, execute the following command from the `security` folder
 
-```shell
+```bash
 keytool -export -keystore wso2carbon.jks -alias wso2carbon -file wso2carbon.crt
 ```
 
 The above-generated certificate will be in binary format. Use the following command to convert the above binary encoded certificate to PEM encoded certificate
 
-```shell
+```bash
 openssl x509 -inform der -in wso2carbon.crt -out wso2carbon.pem
 ```
 
@@ -164,7 +164,7 @@ Generate a private certificate for our express application. Execute the followin
 
 > Use `wso2carbon` as the password for any password-prompts.
 
-```shell
+```bash
 keytool -importkeystore -srckeystore wso2carbon.jks -destkeystore wso2carbon.p12 -deststoretype PKCS12 -srcalias wso2carbon -deststorepass wso2carbon -destkeypass wso2carbon
 -------------
 openssl pkcs12 -in wso2carbon.p12  -nodes -nocerts -out private-key.pem
@@ -182,13 +182,13 @@ After placing the certificates, update the passport SAML strategy as follows
 
 Run the express application by executing the given command from the root folder
 
-```shell
+```bash
 npm start
 ```
 
 Also, start your WSO2 Identity Server instance using the following command from your `<IS_HOME>/bin` directory
 
-```shell
+```bash
 sh wso2server.sh
 ```
 
