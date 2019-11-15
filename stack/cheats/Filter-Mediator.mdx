@@ -99,3 +99,22 @@ Next we will add some `Log` mediators in both `then` and `else` sections of the 
 Now we have successfully written and modified our code to capture and retrieve the `someHeaders` value from the request headers. We will now print some custom message on success as well as on failure methods to prompt in the carbon logs
 
 </CodeWave>
+
+Given below is the complete sample Synapse sequence (`in-sequence`) used to filter request Headers using `Filter` mediator
+
+```xml
+<sequence name="custom-sequence" xmlns="http://ws.apache.org/ns/synapse">
+    <filter source="get-property('mycustomheader', 'transport')">
+        <then>
+            <log level="custom">
+                <property name="message" value="Header is presented" />
+            </log>
+        </then>
+        <else>
+            <log level="custom">
+                <property name="message" value="Header is not presented" />
+            </log>
+        </else>
+    </filter>
+</sequence>
+```
