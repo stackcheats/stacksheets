@@ -1,9 +1,9 @@
 ---
 title: 'WSO2 API Manager & Okta'
-intro: 'WSO2 API Manager & Okta with OpenID Connect SSO'
-short: A Quick Guide on Configuring SSO with OIDC between WSO2 API Manager & Okta IDP
+intro: 'WSO2 API Manager & Okta as Third-Party Keymanager'
+short: A Quick Guide on Configuring Okta as third-party Keymanager for WSO2 API Manager
 category: WSO2
-tags: ['wso2', 'wso2-api-manager', 'okta', 'openid-connect', 'sso']
+tags: ['wso2', 'wso2-api-manager', 'okta', 'keymanager']
 author: Athiththan
 weight: -1
 updated: 2019-12-21
