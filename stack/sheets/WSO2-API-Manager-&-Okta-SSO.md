@@ -1,6 +1,6 @@
 ---
 title: 'WSO2 API Manager & Okta SSO'
-intro: 'WSO2 API Manager & Okta'
+intro: 'WSO2 API Manager & Okta with OpenID Connect SSO'
 short: A Quick Guide on Configuring SSO with OIDC between WSO2 API Manager & Okta IDP
 category: WSO2
 tags: ['wso2', 'wso2-api-manager', 'okta', 'openid-connect', 'sso']
@@ -8,6 +8,7 @@ author: Athiththan
 weight: -1
 updated: 2019-12-20
 date: '2019-12-20T22:30:00.284Z'
+background: '#d2e1f5'
 cover: ../covers/wso2-api-manager-okta-sso.png
 ---
 
@@ -63,7 +64,7 @@ Then, click on `Add Application` to create a new Okta application.
 
 On the next UI, select the platform as `Web` and click on `Next`. Enter the Application Name and tick the `Client Credentials` under the `Grant Type Allowed` section and `Done`.
 
-![Okta Create Application](../assets/wso2-wso2-api-manager-okta-sso/okta-create-application.gif)
+![Okta Create Application](../assets/wso2-api-manager-okta-sso/okta-create-application.gif)
 
 After successful creation of our Okta Application, click on Edit and make the following changes
 
