@@ -10,6 +10,8 @@ updated: 2019-09-08
 date: '2019-09-08T16:25:00.284Z'
 background: '#dae9d0'
 cover: ../covers/configure-LDAP-as-a-secondary-user-store--cover.png
+seo: 'A simple guide to configure LDAP as a secondary user store in WSO2 API Manager with WSO2 Identity Server'
+keywords: ['LDAP Secondary User Store', 'WSO2 API Manager', 'WSO2 Identity Server', 'Secondary User Store', 'WSO2']
 ---
 
 ## Intro

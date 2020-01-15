@@ -9,6 +9,8 @@ weight: -1
 updated: 2019-09-29
 date: '2019-09-29T10:38:00.284Z'
 cover: ../covers/subscribe-apis-using-store-rest-apis--cover.png
+seo: 'A simple guide to use Publisher and Store REST APIs of WSO2 API Manager to Subscribe to APIs'
+keywords: ['WSO2 API Manager', 'REST APIs', 'Store & Publisher Portal']
 ---
 
 ## Intro

@@ -8,6 +8,8 @@ author: Athiththan
 weight: -1
 updated: 2019-07-17
 date: '2019-07-17T13:25:00.284Z'
+seo: 'A simple guide to convert values of a request payload using custom class mediators in WSO2 API Manager'
+keywords: ['WSO2 API Manager', 'WSO2 Class Mediators', 'WSO2']
 ---
 
 ## Intro

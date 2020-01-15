@@ -10,6 +10,8 @@ updated: 2019-12-20
 date: '2019-12-20T22:30:00.284Z'
 background: '#d2e1f5'
 cover: ../covers/wso2-api-manager-okta-sso.png
+seo: 'A simple guide configuring WSO2 API Manager and Okta Cloud Identity Provider with OpenID Connect'
+keywords: ['WSO2 API Manager', 'Okta Identity Provider', 'Okta', 'OpenID Connect', 'OIDC', 'Single-Sign On']
 ---
 
 ## 🔑 Intro

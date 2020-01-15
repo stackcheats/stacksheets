@@ -10,6 +10,8 @@ updated: 2019-07-20
 date: '2019-07-20T09:30:03.284Z'
 background: '#ffe5cc'
 cover: ../covers/saml-sso-with-passport--cover.jpeg
+seo: 'A simple guide on developing and using Passport SAML to perform SAML SSO using WSO2 Identity Server'
+keywords: ['WSO2 Identity Server', 'SAML SSO', 'Passport SAML', 'ExpressJS']
 ---
 
 ## Intro

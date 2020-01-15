@@ -10,6 +10,8 @@ updated: 2019-12-21
 date: '2019-12-21T15:30:00.284Z'
 background: '#d2e1f5'
 cover: ../covers/wso2-api-manager-okta-keymanager.png
+seo: 'A simple guide configuring Okta as a third-party key manager with WSO2 API Manager'
+keywords: ['WSO2 API Manager', 'Okta Identity Provider', '3rd Party Key Manager']
 ---
 
 ## Intro

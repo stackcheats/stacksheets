@@ -10,6 +10,8 @@ updated: 2019-09-28
 date: '2019-09-28T14:35:00.284Z'
 background: '#d7d3ec'
 cover: ../covers/expose-soap-as-rest-apis--cover.png
+seo: 'A simple guide on converting and using SOAP services as REST APIs using WSO2 API Manager and WSO2 Enterprise Integrator'
+keywords: ['WSO2 API Manager', 'WSO2 Enterprise Integrator', 'SOAP to REST API', 'WSO2']
 ---
 
 ## Intro

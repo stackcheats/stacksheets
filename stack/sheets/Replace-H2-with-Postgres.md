@@ -10,6 +10,8 @@ updated: 2019-08-03
 date: '2019-08-03T10:18:00.284Z'
 background: '#fdc99f'
 cover: ../covers/replace-h2-with-postgres--cover.png
+seo: 'A simple guide on replacing the default H2 Carbon DB with Postgre DB in WSO2 Identity Server'
+keywords: ['WSO2 Identity Server', 'Postgre', 'H2 Carbon', 'WSO2', 'Docker']
 ---
 
 ## Docker: Postgres

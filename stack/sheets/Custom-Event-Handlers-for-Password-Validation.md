@@ -8,6 +8,8 @@ author: Athiththan
 weight: -1
 updated: 2019-06-15
 date: '2019-06-15T09:30:03.284Z'
+seo: 'A simple guide to develop and use Event Handlers in WSO2 Identity Server'
+keywords: ['WSO2 Identity Server', 'Event Handlers', 'Java WatchService', 'WSO2']
 ---
 
 ## A Story Guide
