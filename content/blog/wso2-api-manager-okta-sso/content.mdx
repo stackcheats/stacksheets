@@ -1,17 +1,11 @@
 ---
 title: 'WSO2 API Manager & Okta SSO'
+date: '2019-12-20'
 intro: 'WSO2 API Manager & Okta with OpenID Connect SSO'
 short: A Quick Guide on Configuring SSO with OIDC between WSO2 API Manager & Okta IDP
-category: WSO2
 tags: ['wso2', 'wso2-api-manager', 'okta', 'openid-connect', 'sso']
-author: Athiththan
-weight: -1
-updated: 2019-12-20
-date: '2019-12-20T22:30:00.284Z'
-background: '#d2e1f5'
-cover: ../covers/wso2-api-manager-okta-sso.png
 seo: 'A simple guide configuring WSO2 API Manager and Okta Cloud Identity Provider with OpenID Connect'
-keywords: ['WSO2 API Manager', 'Okta Identity Provider', 'Okta', 'OpenID Connect', 'OIDC', 'Single-Sign On']
+cover: cover.png
 ---
 
 ## 🔑 Intro
@@ -44,7 +38,7 @@ Open up your favorite browser and direct to [https://developer.okta.com](https:/
 
 After creating an Okta developer account, sign-in to the developer console and navigate to `API` > `Authorization Server` to list down the default Okta Authorization server.
 
-![Okta Authorization Server](../assets/wso2-api-manager-okta-sso/okta-authorization-server.png)
+![Okta Authorization Server](assets/okta-authorization-server.png)
 
 We will be looking at a similar page as follows with a default Authorization server created in Okta.
 
@@ -52,21 +46,21 @@ We will be looking at a similar page as follows with a default Authorization ser
 
 We can either create a new Authorization server or we can continue using the default Authorization server to configure Okta. As for this demo, we will be continuing our configurations with the Default Authorization Server created by Okta...
 
-![Default Authorization Server](../assets/wso2-api-manager-okta-sso/default-authorization-server.png)
+![Default Authorization Server](assets/default-authorization-server.png)
 
 ### Okta OIDC Application
 
 Next, we will be creating an Okta application for our OpenID Connect SSO flow. In the Okta developer portal, select `Applications` from the top navigation bar as follows...
 
-![Okta Application Navigation](../assets/wso2-api-manager-okta-sso/okta-application-navigation.png)
+![Okta Application Navigation](assets/okta-application-navigation.png)
 
 Then, click on `Add Application` to create a new Okta application.
 
-![Okta Add Application](../assets/wso2-api-manager-okta-sso/okta-add-application.png)
+![Okta Add Application](assets/okta-add-application.png)
 
 On the next UI, select the platform as `Web` and click on `Next`. Enter the Application Name and tick the `Client Credentials` under the `Grant Type Allowed` section and `Done`.
 
-![Okta Create Application](../assets/wso2-api-manager-okta-sso/okta-create-application.gif)
+![Okta Create Application](assets/okta-create-application.gif)
 
 After successful creation of our Okta Application, click on Edit and make the following changes
 
@@ -74,7 +68,7 @@ After successful creation of our Okta Application, click on Edit and make the fo
 * Logout Redirect URI: `https://localhost:9443/commonauth`
 * Initiate Login URI: `https://localhost:9443/store/`
 
-![Okta Application Configuration](../assets/wso2-api-manager-okta-sso/okta-application-configuration.png)
+![Okta Application Configuration](assets/okta-application-configuration.png)
 
 ### Okta User & Claims
 
@@ -82,17 +76,17 @@ To login to the WSO2 API Manager Store portal, the Okta users need to have the `
 
 Navigate to `Users` > `Profile Editor` and select the Okta user profile to edit it. On the following screen, select `Add Attribute` and make the following changes and `Save` the attribute
 
-![Okta Role Attribute](../assets/wso2-api-manager-okta-sso/okta-role-attribute.png)
+![Okta Role Attribute](assets/okta-role-attribute.png)
 
 Then move to `API` > `Authorization Server` and select our default Authorization server. Direct to `Claims` tab and click on `Add Claim` to create a new claim for our Role attribute.
 
 Do the following configurations and save…
 
-![Role Claim](../assets/wso2-api-manager-okta-sso/okta-role-claim.png)
+![Role Claim](assets/okta-role-claim.png)
 
 At last, move to `Users` > `People` and select the current User and on the following screen select the `Profile` tab and click on `Edit` to add the `subscriber` role in the `Role` field.
 
-![Role Attribute Okta User](../assets/wso2-api-manager-okta-sso/okta-role-attribute-user.png)
+![Role Attribute Okta User](assets/okta-role-attribute-user.png)
 
 ## WSO2 API Manager
 
@@ -112,7 +106,7 @@ Fire up the WSO2 API Manager server, and navigate to the Carbon management conso
 
 Enter a name for the Identity Provider (for example OktaIDP) and select the `OAuth2/OpenID Connect Configurations` under the `Federated Authenticators` accordion.
 
-![Create Identity Provider](../assets/wso2-api-manager-okta-sso/add-identity-provider.png)
+![Create Identity Provider](assets/add-identity-provider.png)
 
 Make the following configurations
 
@@ -125,25 +119,25 @@ Make the following configurations
 * `Userinfo Endpoint URL`: `https://<your-okta>.com/oauth2/default/v1/userinfo`
 * `Additional Query Parameters`: `scope=openid profile`
 
-![OpenID Connect Configurations](../assets/wso2-api-manager-okta-sso/openid-connect-configurations.png)
+![OpenID Connect Configurations](assets/openid-connect-configurations.png)
 
 Next, expand the `Claim Configuration` > `Basic Claim Configuration` and select `Define Custom Claim Dialect` to add a custom mapping for the `Roles` claims for the Okta and WSO2 API Manager.
 
-![Claim Configuration](../assets/wso2-api-manager-okta-sso/identity-provider-role-claim-mapping.png)
+![Claim Configuration](assets/identity-provider-role-claim-mapping.png)
 
 After making the above configurations, expand the `Role Configuraiton` and select the `Add Role Mapping` and enter the following to map the `subscriber` role with the `internal/subscriber` role of the WSO2 API Manager.
 
-![Role Configuration](../assets/wso2-api-manager-okta-sso/identity-provider-role-configuration.png)
+![Role Configuration](assets/identity-provider-role-configuration.png)
 
 And at last, expand the `Just-In-Time Provisioning` and select the `Always Provision to User Store Domain` with the `PRIMARY` user store to provision the Okta users to the Primary user-store of the WSO2 API Manager. Please refer to the attached screenshot...
 
-![Just-In-Time Provisioning Configuration](../assets/wso2-api-manager-okta-sso/just-in-time-provisioning-configuration.png)
+![Just-In-Time Provisioning Configuration](assets/just-in-time-provisioning-configuration.png)
 
 And save all the configurations.
 
 Given below is a full rollover screenshot of the configurations of the created `OktaIDP` Identity Provider...
 
-![Identity Provider Configurations](../assets/wso2-api-manager-okta-sso/identity-provider-configurations.png)
+![Identity Provider Configurations](assets/identity-provider-configurations.png)
 
 ### Service Provider
 
@@ -153,7 +147,7 @@ Direct to the Carbon management console of the WSO2 API Manager server, and sele
 
 Enter `API_STORE` as the name of the Service Provider and click on `Register`
 
-![Register Service Provider](../assets/wso2-api-manager-okta-sso/register-service-provider.png)
+![Register Service Provider](assets/register-service-provider.png)
 
 On the following screen, expand the `Inbound Authentication Configuration` and select `Configure` under the `OAuth/OpenID Connect Configuration`.
 
@@ -161,7 +155,7 @@ And prompt the following
 
 * `Callback URL`: `https://localhost:9443/store/jagg/jaggery_oidc_acs.jag`
 
-![OAuth2/OpenID Connect Configurations](../assets/wso2-api-manager-okta-sso/oauth2-openid-connect-configurations.png)
+![OAuth2/OpenID Connect Configurations](assets/oauth2-openid-connect-configurations.png)
 
 And register and save the configurations.
 
@@ -171,17 +165,17 @@ Next, expand the `Local & Outbound Authentication` Configuration and select `Fed
 
 Proceeding further, expand the `Local & Outbound Authentication Configuration` and select the `Federated Authentication` along with created `OktaIDP` Identity Provider.
 
-![Local & Outbound Authentication Configuration](../assets/wso2-api-manager-okta-sso/local-outbound-authentication-configuration.png)
+![Local & Outbound Authentication Configuration](assets/local-outbound-authentication-configuration.png)
 
 And at last, expand the `Claim Configuration` and select the `Define Custom Claim Dialect` and make the following changes to extract the `preferred_username` from the generated JWT to make it as the username and Display Name of the provisioned user.
 
-![Claim Configuration](../assets/wso2-api-manager-okta-sso/service-provider-claim-configuration.png)
+![Claim Configuration](assets/service-provider-claim-configuration.png)
 
 And save and register all the configurations to create a Service Provider for the Store portal.
 
 Given below is a full rollover screenshot of the configurations of the created `API_STORE` Service Provider...
 
-![Service Provider Configuration](../assets/wso2-api-manager-okta-sso/service-provider-configuration.png)
+![Service Provider Configuration](assets/service-provider-configuration.png)
 
 ### Store Site.JSON
 
@@ -239,13 +233,13 @@ You will be redirected to the Okta’s login page to perform SSO with the Okta u
 
 If you encounter any Cross-Origin errors when accessing the Okta Cloud IDP, sign-in to the Okta developer portal and navigate `API` > `Trusted Origins` to add our Domain as a trusted origin in the Okta.
 
-![Trusted Origins](../assets/wso2-api-manager-okta-sso/okta-trusted-origins-navigation.png)
+![Trusted Origins](assets/okta-trusted-origins-navigation.png)
 
 On the following screen select `Add Origin` and make the following...
 
-![Add Origin](../assets/wso2-api-manager-okta-sso/create-trusted-origin.png)
+![Add Origin](assets/create-trusted-origin.png)
 
-![Add Trusted Origin](../assets/wso2-api-manager-okta-sso/add-trusted-origin.png)
+![Add Trusted Origin](assets/add-trusted-origin.png)
 
 `Save` the configurations.
 
@@ -255,14 +249,14 @@ If you encounter any error related to Username format as email while performing 
 
 Login to the Okta developer portal and navigate to `Users` > `Profile Editor`
 
-![Profile Editor Navigation](../assets/wso2-api-manager-okta-sso/okta-profile-editor-navigation.png)
+![Profile Editor Navigation](assets/okta-profile-editor-navigation.png)
 
 Select the `Profile` of the Okta User. On the following screen, select the info icon of the Username attribute to edit it.
 
-![User Profile Editor](../assets/wso2-api-manager-okta-sso/okta-profile-editor.png)
+![User Profile Editor](assets/okta-profile-editor.png)
 
 Change the `Format Restrictions` from `Email Format` to `None` or `Custom Character Restrictions` and `Save Attribute`.
 
-![Profile Editor Username Attribute](../assets/wso2-api-manager-okta-sso/username-attribute.png)
+![Profile Editor Username Attribute](assets/username-attribute.png)
 
 <hr class="three--dots"/>

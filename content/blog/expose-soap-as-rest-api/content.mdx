@@ -1,17 +1,11 @@
 ---
 title: 'Expose SOAP as REST API'
+date: '2019-09-28'
 intro: 'WSO2 API Manager & Enterprise Integrator: SOAP as REST API'
 short: A Quick Start on using WSO2 API Manager and Enterprise Integrator to Expose SOAP Services as REST APIs
-category: WSO2
 tags: ['wso2', 'wso2-api-manager', 'wso2-enterprise-integrator', 'soap', 'rest']
-author: Athiththan
-weight: -1
-updated: 2019-09-28
-date: '2019-09-28T14:35:00.284Z'
-background: '#d7d3ec'
-cover: ../covers/expose-soap-as-rest-apis--cover.png
 seo: 'A simple guide on converting and using SOAP services as REST APIs using WSO2 API Manager and WSO2 Enterprise Integrator'
-keywords: ['WSO2 API Manager', 'WSO2 Enterprise Integrator', 'SOAP to REST API', 'WSO2']
+cover: cover.png
 ---
 
 ## Intro
@@ -139,7 +133,7 @@ I have implemented and provided a carbon archive with configurations related to 
     </div>
 </a>
 
-![WSO2 EI: Add Carbon Application](../assets/expose-soap-as-rest-api/add_carbon_application.png)
+![WSO2 EI: Add Carbon Application](assets/add_carbon_application.png)
 
 Select `Add` under `Carbon Applications` section and upload and deploy the above-provided carbon archive.
 
@@ -213,23 +207,23 @@ Given below is a complete Swagger definition for our Developer Management REST A
 
 Click on `Add New API`
 
-![WSO2 APIM: Add New API](../assets/expose-soap-as-rest-api/add_new_api.png)
+![WSO2 APIM: Add New API](assets/add_new_api.png)
 
 Then select `I Have an Existing API` and upload the provided swagger file.
 
-![WSO2 APIM: Swagger Upload](../assets/expose-soap-as-rest-api/swagger_upload.png)
+![WSO2 APIM: Swagger Upload](assets/swagger_upload.png)
 
 Add the context as `/dev-management` and click `Next: Implement`
 
-![WSO2 APIM: Context Configuration](../assets/expose-soap-as-rest-api/context_configuration.png)
+![WSO2 APIM: Context Configuration](assets/context_configuration.png)
 
 Add [`https://localhost:8243/dev-management`](https://localhost:8243/dev-management) as the `Production Endpoint` and click `Next: Manage`
 
-![WSO2 APIM: Production Endpoint](../assets/expose-soap-as-rest-api/production_endpoint.png)
+![WSO2 APIM: Production Endpoint](assets/production_endpoint.png)
 
 Select all applicable throttling tiers and click `Save & Publish` to publish the Developer Management REST API to the Store portal.
 
-![WSO2 APIM: Throttling Configurations](../assets/expose-soap-as-rest-api/throttling_configurations.png)
+![WSO2 APIM: Throttling Configurations](assets/throttling_configurations.png)
 
 ### Subscribe API
 
@@ -239,11 +233,11 @@ Select our published API and subscribe to the `DefaultApplication` with `Unlimit
 
 > You can create a new application by navigating to the Application section in the Store portal and subscribe to that API with applicable Tier
 
-![WSO2 APIM: Store Overview](../assets/expose-soap-as-rest-api/store_overview.png)
+![WSO2 APIM: Store Overview](assets/store_overview.png)
 
 Select `View Subscriptions` from the alert box and then navigate to the `Production Keys` tab and select `Generate Keys` to generate new consumer keys for our `DefaultApplication`.
 
-![WSO2 APIM: Store Default Application Productions Keys](../assets/expose-soap-as-rest-api/store_default_application.png)
+![WSO2 APIM: Store Default Application Productions Keys](assets/store_default_application.png)
 
 After a successful generation, copy the `Access Token` value to invoke our defined REST APIs.
 

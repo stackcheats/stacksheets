@@ -1,17 +1,11 @@
 ---
 title: 'WSO2 API Manager & Okta'
+date: '2019-12-21'
 intro: 'WSO2 API Manager & Okta as Third-Party Keymanager'
 short: A Quick Guide on Configuring Okta as third-party Keymanager for WSO2 API Manager
-category: WSO2
 tags: ['wso2', 'wso2-api-manager', 'okta', 'keymanager']
-author: Athiththan
-weight: -1
-updated: 2019-12-21
-date: '2019-12-21T15:30:00.284Z'
-background: '#d2e1f5'
-cover: ../covers/wso2-api-manager-okta-keymanager.png
 seo: 'A simple guide configuring Okta as a third-party key manager with WSO2 API Manager'
-keywords: ['WSO2 API Manager', 'Okta Identity Provider', '3rd Party Key Manager']
+cover: cover.png
 ---
 
 ## Intro
@@ -43,7 +37,7 @@ After successful account creation, now we have to create and register an Authori
 
 In the Okta developer portal navigate to `API` > `Authorization Servers` (refer to the attached screen-shot)
 
-![Okta Authorization Server](../assets/wso2-api-manager-okta/okta-authorization-server-navigation.png)
+![Okta Authorization Server](assets/okta-authorization-server-navigation.png)
 
 We will be looking at a similar page as follows with a default Authorization server created in Okta.
 
@@ -51,7 +45,7 @@ We will be looking at a similar page as follows with a default Authorization ser
 
 We can either create a new Authorization server or we can continue using the default Authorization server to configure Okta. Therefore, we will be continuing our configurations with the Default Authorization Server created by Okta...
 
-![Default Authorization Server](../assets/wso2-api-manager-okta/authorization-server-list.png)
+![Default Authorization Server](assets/authorization-server-list.png)
 
 Select the default Authorization server and click on the `Scopes` tab to create a Default Scope for the defined Authorization Server. Click on `Add Scope` and prompt the following
 
@@ -62,15 +56,15 @@ Select the default Authorization server and click on the `Scopes` tab to create 
 
 and click `Create` to create the Default scope.
 
-![Create Defualt Scope](../assets/wso2-api-manager-okta/create-default-scope.png)
+![Create Defualt Scope](assets/create-default-scope.png)
 
 Next, select the `Tokens` tab to create a new API Token for WSO2 API Manager to communicate with our Okta server.
 
-![Authorization Server Tokens](../assets/wso2-api-manager-okta/authorization-server-tokens.png)
+![Authorization Server Tokens](assets/authorization-server-tokens.png)
 
 Click on `Create Token` and enter a name for the Token and copy and save the generated token value for future references. From now onwards, We will be referring to the token as `Okta API Token`.
 
-![Authorization Server Token List](../assets/wso2-api-manager-okta/authorization-server-token-list.png)
+![Authorization Server Token List](assets/authorization-server-token-list.png)
 
 ### Okta Application
 
@@ -78,11 +72,11 @@ Next, we have to create a client application in the Okta IdP to acquire the Cons
 
 Select the `Applications` from the top navigation bar and then select `Add Application` to create one.
 
-![Okta Application](../assets/wso2-api-manager-okta/add-okta-application.png)
+![Okta Application](assets/add-okta-application.png)
 
 On the next UI, select the platform as `Web` and click `Next`. Enter the Application name and tick the `Client Credentials` under `Grant Type Allowed` section and `Done`.
 
-![Create Okta Application](../assets/wso2-api-manager-okta/create-okta-application.gif)
+![Create Okta Application](assets/create-okta-application.gif)
 
 After the successful creation of the Application, copy both the Consumer Key and Consumer Secret for future references.
 
@@ -200,11 +194,11 @@ Steer to `Applications` > `Add Application` to create a new Store Application.
 
 > By default, there will be a Default Application created (once logged in) for each and every user who has the `internal/subscriber` role and permissions
 
-![Add Store Application](../assets/wso2-api-manager-okta/store-add-application.png)
+![Add Store Application](assets/store-add-application.png)
 
 Give inputs to all required fields and click on Add to create the Application.
 
-![Store Application](../assets/wso2-api-manager-okta/store-application-create.png)
+![Store Application](assets/store-application-create.png)
 
 After the successful creation of our demo application, let’s direct to `Production Keys` tab to generate Consumer Secrets and Access Tokens using Okta third-party Key Manager.
 
@@ -225,17 +219,17 @@ Provide the following at the prompted UI to generate the Consumer keys
 * Token Scope: `default`
 * Token Grant Type: `client_credentials`
 
-![Production Key Generation](../assets/wso2-api-manager-okta/production-key-generate.png)
+![Production Key Generation](assets/production-key-generate.png)
 
 Upon successful generation of the key, the APIM server will prompt a similar UI as following
 
 > Please make sure to note the generated Consumer Key and Consumer Secret because as this will be only displayed one time
 
-![Production Keys](../assets/wso2-api-manager-okta/store-production-keys.png)
+![Production Keys](assets/store-production-keys.png)
 
 If we navigate to the Okta Dev portal, there we can see a new application with the name `OktaDemoApplication_PRODUCTION` as follows
 
-![Okta Demo Application](../assets/wso2-api-manager-okta/okta-demo-application.png)
+![Okta Demo Application](assets/okta-demo-application.png)
 
 As of next step, copy the generated access token and invoke the deployed sample PizzaShack API.
 
