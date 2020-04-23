@@ -107,11 +107,11 @@ public class MyAPIMTokenIssuer extends APIMTokenIssuer {
             String tokenType = application.getTokenType();
             // only acceptable for opaque access tokens and not JWT tokens
             if (!APIConstants.JWT.equals(tokenType)) {
-                
+
                 // retrieve all request parameters sent to the token request
                 RequestParameter[] reqParams = tokReqMsgCtx.getOauth2AccessTokenreqDTO().getRequestParameters();
                 for (int i = 0l i < reqParams.length; i++) {
-                    // check for devhash from the request parameters 
+                    // check for devhash from the request parameters
                     // and append it to the access token
                     if ("devhash".equals(reqParams[i].getKey())) {
                         accessToken += reqParams[i].getValue()[0];
@@ -128,7 +128,7 @@ public class MyAPIMTokenIssuer extends APIMTokenIssuer {
 }
 ```
 
-I know right, it’s really hard to follow these things up 😐 
+I know right, it’s really hard to follow these things up 😐
 
 Therefore, I give you a golden opportunity… Please go and find the sample implementation (gist) from [GitHub Gist](https://gist.github.com/athiththan11/905f0c875c619630327cd869ca1b01f9) (save your time on reading this medium) and enjoy enriching it 😍
 
@@ -188,11 +188,11 @@ And the response should be as follows with the Dev-Hash value appended to the Ac
   "scope": "default",
   "token_type": "Bearer",
   "expires_in": 3600
-} 
+}
 ```
 
-<Reference 
-    title="Sample APIMTokenIssuer" 
+<Reference
+    title="Sample APIMTokenIssuer"
     description="A simple custom APIMTokenIssuer Implementation"
-    hyperlink="https://github.com/athiththan11/Sample-APIMTokenIssuer" 
+    hyperlink="https://github.com/athiththan11/Sample-APIMTokenIssuer"
 />

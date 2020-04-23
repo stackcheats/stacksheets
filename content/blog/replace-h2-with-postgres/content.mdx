@@ -37,8 +37,8 @@ docker run --name <CONTAINER_NAME || postgres-9.6.14> -e POSTGRES_PASSWORD=hydro
 
 > Basic commands to `start` and `stop` a Docker container
 >
-> -   `docker start <CONTAINER_NAME>` to start a container
-> -   `docker stop <CONTAINER_NAME>` to stop a running container
+> - `docker start <CONTAINER_NAME>` to start a container
+> - `docker stop <CONTAINER_NAME>` to stop a running container
 
 ### PSQL Terminal
 
@@ -56,11 +56,11 @@ To replace the default packaged H2 database with Postgres, initially, we have to
 
 > You can use either any database tools like DBeaver (Jump to [DBeaver](#dbeaver)) or you can straightaway execute them using PSQL terminal (Jump to [PSQL](#psql))
 
--   `<IS>/dbscripts/postgresql.sql`
--   `<IS>/dbscripts/identity/postgresql.sql`
--   `<IS>/dbscripts/identity/uma/postgresql.sql`
--   `<IS>/dbscripts/identity/stored-procedures/postgre/postgresql.sql`
--   `<IS>/dbscripts/consent/postgresql.sql`
+- `<IS>/dbscripts/postgresql.sql`
+- `<IS>/dbscripts/identity/postgresql.sql`
+- `<IS>/dbscripts/identity/uma/postgresql.sql`
+- `<IS>/dbscripts/identity/stored-procedures/postgre/postgresql.sql`
+- `<IS>/dbscripts/consent/postgresql.sql`
 
 Start the Postgres container (if not started before) using the following command
 
@@ -138,13 +138,13 @@ After setting up the databases, now we have to install the Postgres JDBC connect
 
 Next, we have to configure our database connection settings in the Identity Server to connect to our Postgres source. Make changes to the following XML files to swap the connection from default H2 database to our Postgres database.
 
--   [`<IS>/repository/conf/datasources/master-datasources.xml`](#master-datasource)
--   [`<IS>/repository/conf/identity/identity.xml`](#identity)
--   [`<IS>/repository/conf/registry.xml`](#registry)
+- [`<IS>/repository/conf/datasources/master-datasources.xml`](#master-datasource)
+- [`<IS>/repository/conf/identity/identity.xml`](#identity)
+- [`<IS>/repository/conf/registry.xml`](#registry)
 
 > Moreover, We will also be swapping the user store from the default LDAP server to the JDBC store
 
--   [`<IS>/repository/conf/user-mgt.xml`](#user-management)
+- [`<IS>/repository/conf/user-mgt.xml`](#user-management)
 
 > Replace and change the `host`, `port`, `username`, and `password` segments with respective values if different.
 

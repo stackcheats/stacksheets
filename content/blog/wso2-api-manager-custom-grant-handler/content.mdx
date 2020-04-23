@@ -47,7 +47,7 @@ Let’s keep the stories aside and dive into implementations.
 The **WSO2 API Manager**, or more likely to say the WSO2 Carbon platform is built in a way to extend and plug and play with the functions if required.
 
 > **On a Personal Note**
-> 
+>
 > It is always good to **think twice** before introducing any customizations or extensions to the platform
 
 So to achieve our needs, We have to extend the implementation of **AbstractAuthorizationGrantHandler** and push our enhancements to it.
@@ -118,18 +118,18 @@ import org.wso2.carbon.identity.oauth2.token.handlers.grant.AbstractAuthorizatio
 
 public class LocusGrantHandler extends AbstractAuthorizationGrantHandler {
     private static final Log log = LogFactory.getLog(LocusGrantHandler.class);
-    
+
     @Override
     public boolean validateGrant(OAuthTokenReqMessageContext tokReqMsgCtx) throws IdentityOAuth2Exception {
         log.info("Locus Grant Handler : Starting to validate grant");
-        
+
         boolean isGrantValid = false;
         RequestParameter[] reqParams = tokReqMsgCtx.getOauth2AccessTokenReqDTO().getRequestParameters();
 
         String nameValue = null;
         String locationValue = null;
         String keyValue = null;
-        
+
         for (RequestParameter param : reqParams) {
             switch (param.getKey()) {
                 case LocusGrantConstants.LOCUS_NAME_GRANT_PARAM:
@@ -146,7 +146,7 @@ public class LocusGrantHandler extends AbstractAuthorizationGrantHandler {
 
         if (nameValue != null && locationValue != null && keyValue != null) {
             isGrantValid = (isValidName(nameValue) && isValidLocation(locationValue) && isValidKey(keyValue));
-            
+
             if (isGrantValid) {
                 AuthenticatedUser locusUser = new AuthenticatedUser();
                 locusUser.setUserName(keyValue);
@@ -166,7 +166,7 @@ public class LocusGrantHandler extends AbstractAuthorizationGrantHandler {
 
         return isGrantValid;
     }
-    
+
     private boolean isValidName(String name) {
         // mocking database call with a sample list
         List<String> validNames = new ArrayList<>();
@@ -198,7 +198,7 @@ public class LocusGrantHandler extends AbstractAuthorizationGrantHandler {
 ### A Toll-Free Tip 💪
 
 > It is required to create and set an AuthenticatedUser in the success flow to generate an access token and to bind it to that particular user. Otherwise, we’ll end up in a broken flow.
-> 
+>
 > Due to that, I have introduced and configured the key value of the Device to bound the generated access tokens
 
 And that’s all about the Grant handler …
@@ -250,8 +250,8 @@ curl --location --request POST 'https://localhost:8243/token' \
    --data-urlencode 'key=0987654321'
 ```
 
-<Reference 
-    title="LocusGrantHandler" 
+<Reference
+    title="LocusGrantHandler"
     description="A Custom Grant (Handler & Validator) Implementation for WSO2 API Manager"
-    hyperlink="https://github.com/athiththan11/LocusGrantHandler" 
+    hyperlink="https://github.com/athiththan11/LocusGrantHandler"
 />

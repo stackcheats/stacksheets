@@ -16,7 +16,7 @@ bgcolor: '#ffe5cc'
 This post narrates on how-to enable and register a service provider for SAML SSO using WSO2 Identity Server and to develop a simple Express-based web application with Passport-SAML component to support and authenticate the users via SAML SSO.
 
 > Security Assertion Markup Language (SAML) is an XML-based framework for authentication and authorization between a Service Provider and an Identity Provider. SAML is a standard Single-Sign-On (SSO) format. Authentication information is exchanged through digitally signed XML documents.
-> 
+>
 > [For more on SAML](https://auth0.com/blog/how-saml-authentication-works)
 
 ## Implementation
@@ -74,9 +74,9 @@ Expand the *Claim Configurations (accordion)* to configure wanted claims and sub
 
 For the demo, we will be selecting the following claims
 
-* http://wso2.org/claims/emailaddress
-* http://wso2.org/claims/username
-* http://wso2.org/claims/role
+* `http://wso2.org/claims/emailaddress`
+* `http://wso2.org/claims/username`
+* `http://wso2.org/claims/role`
 
 And choose `http://wso2.org/claims/emailaddress` as the *Subject Claim URI*.
 
@@ -86,18 +86,18 @@ Next, expand the *Inbound Authentication Configuration (accordion)* and click on
 
 Configure the SAML SSO as follows …
 
-* Issuer: SampleExpressApp
-* Assertion Consumer URLs: http://localhost:3000/saml/consume
-* Enable Response Signing: True
+* Issuer: `SampleExpressApp`
+* Assertion Consumer URLs: `http://localhost:3000/saml/consume`
+* Enable Response Signing: `True`
 * Enable Signature Validation in Authentication Requests and Logout Requests: False
 
 > To enable signature validate in both authentication requests and logout requests, please refer the `Certificates and Signing` section.
 
-* Enable Single Logout: True
-* SLO Response URL: http://localhost:3000/app/home
-* SLO Request URL: http://localhost:3000/app/home
-* Enable Attribute Profile: True
-* Include Attributes in the Response Always: True
+* Enable Single Logout: `True`
+* SLO Response URL: `http://localhost:3000/app/home`
+* SLO Request URL: `http://localhost:3000/app/home`
+* Enable Attribute Profile: `True`
+* Include Attributes in the Response Always: `True`
 
 ![SAML SSO configurations](assets/saml_sso_configurations.png)
 
@@ -211,8 +211,8 @@ Navigate to `http://localhost:3000/app/logout` to log-out from the SAML SSO sess
 
 ### GitHub
 
-<Reference 
-    title="Passport SAML WSO2" 
+<Reference
+    title="Passport SAML WSO2"
     description="A sample express application with Passport-SAML for WSO2 SAML2 SSO"
-    hyperlink="https://github.com/athiththan11/Passport-SAML-WSO2" 
+    hyperlink="https://github.com/athiththan11/Passport-SAML-WSO2"
 />
