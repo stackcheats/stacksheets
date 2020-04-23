@@ -1,0 +1,257 @@
+---
+title: WSO2 API Manager & Custom Grant Handler
+date: '2020-01-11'
+intro: 'A Quick Guide: Designing and Constructing a Custom Grant Handler'
+short: Designing and Constructing a Custom Grant Handler
+medium: https://medium.com/@athiththan11/wso2-api-manager-custom-grant-handler-de467d588cba
+
+tags: ['wso2', 'wso2-api-manager', 'grant-handler', 'authorization-grant']
+seo: 'A simple guide on developing a custom grant handler in WSO2 API Manager'
+bgcolor: '#ead1dd'
+---
+
+## Greetings Everyone! 👋
+
+In this medium, I will be 🚶 with you all on how to implement a custom Grant Handler for WSO2 Servers, especially for WSO2 API Manager when you are highly in need to introduce your own …
+
+> The demonstrations are presented and guided using WSO2 API Manager v2.6
+
+Hmmm… alright. But,
+
+## Am I in need of one??? 🤔
+
+Depends, maybe Yes, probably you are 💁.
+
+Let me tell you a simple story, where a Goe-Location Startup needed to implement a custom grant to fulfill their security concerns and requirements.
+
+__Locus__ is a Geo-Location 🌏 service startup and it has been using the WSO2 API Manager to manage all of their exposed REST APIs and legacy SOAP services. Due to the increased demand for Geodata and analytics, one day the Locus team gathered to design a new architecture for their certified devices.
+
+The 👮 platform security team and a group of Architectures 🤓 proposed Locus to isolate their certified devices from all registered devices by introducing a unique pattern for Access tokens 🔑.
+
+When further breaking-down the features and analyzing the possibilities of implementing customized Tokens (you can refer to [Customizing Opaque Access Token Generation](https://medium.com/@athiththan11/customizing-opaque-access-token-generation-58ec7e493405)), the devs found out that the WSO2 API Manager has extensions to develop and plug custom grants 🔐 and handlers.
+
+👏 👏 👏 well-done guys… kudos for the effort and idea.
+
+They re-engineered their architecture and introduced a custom grant named `locus` with the following required fields to fulfill their requirements
+
+- **name**: the unique ID name of the certified device
+- **location**: a regional code where the device has permissions and its current accessible location
+- **key**: a unique hash key embed to the certified device upon certification
+
+I hope I made a good story to explain the case…
+
+Let’s keep the stories aside and dive into implementations.
+
+## 🚧 Implementation
+
+The **WSO2 API Manager**, or more likely to say the WSO2 Carbon platform is built in a way to extend and plug and play with the functions if required.
+
+> **On a Personal Note**
+> 
+> It is always good to **think twice** before introducing any customizations or extensions to the platform
+
+So to achieve our needs, We have to extend the implementation of **AbstractAuthorizationGrantHandler** and push our enhancements to it.
+
+Let’s start by setting up a Maven project …
+Create a new Maven project and the following dependencies in the POM
+
+```xml
+<dependency>
+    <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
+    <artifactId>org.wso2.carbon.identity.oauth</artifactId>
+    <version>6.0.53</version>
+</dependency>
+```
+
+If you encounter any dependency resolution errors or if you are not able to resolve the dependencies, add the following repositories to fetch ‘em
+
+```xml
+<repositories>
+    <repository>
+        <id>wso2-nexus</id>
+        <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+            <checksumPolicy>ignore</checksumPolicy>
+        </releases>
+    </repository>
+</repositories>
+
+<pluginRepositories>
+    <pluginRepository>
+        <id>wso2-nexus</id>
+        <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+            <checksumPolicy>ignore</checksumPolicy>
+        </releases>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+With success, let’s dive into the implementation of Grant Handlers. Grant Handlers are responsible to validate the Grant type and to issue Access Tokens.
+
+Since we don’t want to do any customizations to our Access Tokens, we will be only overriding the `validateGrant()` method to validate the inputs.
+
+## 🌏 Locus Grant Handler
+
+I’ve made it simple 🙌 for you all to save your precious time. You can find the complete development at the bottom of this story, but if you have time go through it (I’ve spent my time to write this one 😢)…
+
+Given below is the complete implementation of the Locus Grant Handler. I’ve introduced a couple of isValid() methods to mock the validation and service calls to any defined data sources.
+
+```java
+package com.grant.sample.handler;
+
+import java.util.ArrayList;
+import java.util.List;
+import com.grant.sample.utils.LocusGrantConstants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.identity.application.authentication.framework.model.AuthenticatedUser;
+import org.wso2.carbon.identity.oauth2.IdentityOAuth2Exception;
+import org.wso2.carbon.identity.oauth2.ResponseHeader;
+import org.wso2.carbon.identity.oauth2.model.RequestParameter;
+import org.wso2.carbon.identity.oauth2.token.OAuthTokenReqMessageContext;
+import org.wso2.carbon.identity.oauth2.token.handlers.grant.AbstractAuthorizationGrantHandler;
+
+public class LocusGrantHandler extends AbstractAuthorizationGrantHandler {
+    private static final Log log = LogFactory.getLog(LocusGrantHandler.class);
+    
+    @Override
+    public boolean validateGrant(OAuthTokenReqMessageContext tokReqMsgCtx) throws IdentityOAuth2Exception {
+        log.info("Locus Grant Handler : Starting to validate grant");
+        
+        boolean isGrantValid = false;
+        RequestParameter[] reqParams = tokReqMsgCtx.getOauth2AccessTokenReqDTO().getRequestParameters();
+
+        String nameValue = null;
+        String locationValue = null;
+        String keyValue = null;
+        
+        for (RequestParameter param : reqParams) {
+            switch (param.getKey()) {
+                case LocusGrantConstants.LOCUS_NAME_GRANT_PARAM:
+                    nameValue = param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : null;
+                    break;
+                case LocusGrantConstants.LOCUS_LOCATION_GRANT_PARAM:
+                    locationValue = param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : null;
+                    break;
+                case LocusGrantConstants.LOCUS_KEY_GRANT_PARAM:
+                    keyValue = param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : null;
+                    break;
+            }
+        }
+
+        if (nameValue != null && locationValue != null && keyValue != null) {
+            isGrantValid = (isValidName(nameValue) && isValidLocation(locationValue) && isValidKey(keyValue));
+            
+            if (isGrantValid) {
+                AuthenticatedUser locusUser = new AuthenticatedUser();
+                locusUser.setUserName(keyValue);
+                tokReqMsgCtx.setAuthorizedUser(locusUser);
+                tokReqMsgCtx.setScope(tokReqMsgCtx.getOauth2AccessTokenReqDTO().getScope());
+            } else {
+                ResponseHeader responseHeader = new ResponseHeader();
+                responseHeader.setKey("LocusGrantError");
+                responseHeader.setValue("Invalid Credentials");
+                tokReqMsgCtx.addProperty("RESPONSE_HEADERS", new ResponseHeader[] { responseHeader });
+            }
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Locus Grant Handler : isGrantValid = " + isGrantValid);
+        }
+
+        return isGrantValid;
+    }
+    
+    private boolean isValidName(String name) {
+        // mocking database call with a sample list
+        List<String> validNames = new ArrayList<>();
+        validNames.add("locus-10-09874");
+        validNames.add("locus-10-01219");
+        return validNames.contains(name);
+    }
+
+    private boolean isValidLocation(String location) {
+        // mocking the database with a sample list
+        List<String> validLocations = new ArrayList<>();
+        validLocations.add("LK-COLOMBO");
+        validLocations.add("LK-KANDY");
+        return validLocations.contains(location);
+    }
+
+    private boolean isValidKey(String key) {
+        // mocking database call with a sample list
+        List<String> validKeys = new ArrayList<>();
+        validKeys.add("0987654321");
+        validKeys.add("1234567890");
+        return validKeys.contains(key);
+    }
+}
+```
+
+> Find the util class implementation from here
+
+### A Toll-Free Tip 💪
+
+> It is required to create and set an AuthenticatedUser in the success flow to generate an access token and to bind it to that particular user. Otherwise, we’ll end up in a broken flow.
+> 
+> Due to that, I have introduced and configured the key value of the Device to bound the generated access tokens
+
+And that’s all about the Grant handler …
+
+Now let’s configure our API Manager server to support the custom grant
+
+## WSO2 API Manager Configurations
+
+Before configuring our API Manager pack, we have to build our Maven project. Execute the following command to build the project
+
+```bash
+mvn clean package
+```
+
+And copy and place the built JAR artifact inside the `<APIM>/repository/components/lib directory`.
+
+Now direct to the `<APIM>/repository/conf/identity` directory and open up the `identity.xml` to add and support our `locus` grant with API Manager
+
+```xml
+<SupportedGrantTypes>
+  ...
+    <SupportedGrantType>
+        <GrantTypeName>locus</GrantTypeName>
+        <GrantTypeHandlerImplClass>com.grant.sample.handler.LocusGrantHandler</GrantTypeHandlerImplClass>
+        <GrantTypeValidatorImplClass>com.grant.sample.validator.LocusGrantValidator</GrantTypeValidatorImplClass>
+        <IdTokenAllowed>false</IdTokenAllowed>
+    </SupportedGrantType>
+  ...
+</SupportedGrantTypes>
+```
+
+and that’s all … 🎉
+
+### 👏 Voila!!! 🙌
+
+It is time to do an examination
+
+## Examine 🕵
+
+Fire up the WSO2 API Manager server, and execute the request using either cURL or Postman or from your favorite REST client and take a note ✅
+
+```bash
+curl --location --request POST 'https://localhost:8243/token' \
+   --header 'Authorization: Basic {base64<ClientID:Client Secret>}'\
+   --header 'Content-Type: application/x-www-form-urlencoded' \
+   --data-urlencode 'grant_type=locus' \
+   --data-urlencode 'name=locus-10-09874' \
+   --data-urlencode 'location=LK-COLOMBO' \
+   --data-urlencode 'key=0987654321'
+```
+
+<Reference 
+    title="LocusGrantHandler" 
+    description="A Custom Grant (Handler & Validator) Implementation for WSO2 API Manager"
+    hyperlink="https://github.com/athiththan11/LocusGrantHandler" 
+/>
