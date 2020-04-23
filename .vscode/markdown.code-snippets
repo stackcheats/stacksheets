@@ -1,0 +1,16 @@
+{
+    "Reference Element": {
+        "scope": "markdown,react-markdown",
+        "prefix": "reference",
+        "body": [
+            "<Reference\n\ttitle='$1'\n\tdescription='$2'\n\thyperlink='$3'\n/>"
+        ],
+        "description": "Reference Element"
+    },
+    "Gist Element": {
+        "scope": "markdown,react-markdown",
+        "prefix": "gist",
+        "body": "`gist:$1/$2#$3`",
+        "description": "Gist Element"
+    }
+}
