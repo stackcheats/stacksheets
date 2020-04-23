@@ -1,0 +1,120 @@
+---
+title: WSO2 API Manager & OAuth2 Protected Endpoint
+date: '2020-03-29'
+intro: 'Quick Guide: Configuring OAuth2 Protected Endpoint'
+short: Integrate OAuth2 Protected Endpoints with WSO2 API Manager
+medium: https://medium.com/@athiththan11/wso2-api-manager-oauth2-protected-endpoint-aa51c62f0ad7
+
+tags: ['wso2', 'wso2-api-manager', 'oauth2', 'programming']
+seo: 'A guide on integrating OAuth2 protected endpoints with WSO2 API Manager'
+bgcolor: '#ead1dd'
+---
+
+## Intro
+
+As out-of-the-box 📦, the WSO2 API Manager supports Basic Auth and Digest Auth Protocol protected APIs and Backend services to integrate through. But, what if we have an OAuth2 Protected service and want to integrate and expose the service through API Manager? 🤔🤔🤔
+
+In this medium, we will be going through a couple of custom mediation sequence and custom mediator implementations to fulfill our requirements on integrating OAuth2 protected APIs and Backends.
+
+WSO2 Products, to be more specific the underlying Carbon Kernal platform provides extension points to plug and play custom sequences and mediation implementations to achieve customize requirements. We will be going through a custom mediation sequence and a custom mediator implementation today to achieve our requirements.
+
+## Custom Mediation Sequence
+
+### Simple Mediation Sequence
+
+We can make use of the Synapse engine and the Synapse mediation sequences in WSO2 API Manager to achieve our ultimate requirement. Given below is a sample mediation in-sequence developed to call the respective OAuth2 token endpoint and use the generated Bearer Token to access the Backend.
+
+> Please note that the below-given Synapse mediation sequence is a sample and it needs some tweaks to make it work with other customized use-cases
+
+`gist:athiththan11/3173086e7f30110424bf1aafbfdfb4b7#oauth2-sequence.xml`
+
+Now you have given us a sample mediation sequence to call the token endpoint and then to invoke the actual endpoint. But wait ✋, I noticed that the mediation is going to perform a Token call each and every time, and that is going to be an extra call for the API Manager.
+
+Hmmm … 🙄🤔
+
+Yes true, as per the sample mediation, yes, it will perform Token call each and every time. Well, we can minimize that by storing the acquired access token and the validity period in a temporary location (probably a Registry location) and make use of it.
+
+## 🚧Enhanced Mediation Sequence with Registry Access
+
+Given-below is an enhanced sample mediation sequence to store and retrieve the access token and the generated time from a custom Registry location and based on the validity to perform the Token call. 👌
+
+If you are willing to continue with the enhanced mediation sequence, then it is required to create the necessary Registry resource in the API Manager server prior to the usage for a flawless experience.
+
+I will be creating the following two Registry resources in a custom Governance Registry location
+
+- `access_token` : To store the acquired Access Token
+- `generated_time` : To store the Generated time of the Access token
+
+You can create the necessary Registry collections and resources by navigating to the **Carbon Management Console > Browse > Registry > _system > governance ** and add a registry collection named `oauth_endpoint`.
+
+After successfully creating the Registry collection (`oauth_endpoint`), create the above-mentioned two registry resources with the following content
+
+- `access_token` : Leave the content as empty
+- `generated_time` : 0 (this is because we will be referring to this as Long type)
+
+`gist:athiththan11/debc349f8dee97d1b550d22bf8b0b438#oauth2-enhanced-sequence.xml`
+
+> 🚩 Note: <br/>
+> The above-given mediation sequence needs access to the Registry DB to store and retrieve the access token related data. Therefore, if you are using a Distributed deployment (separate Gateway node), we do not recommend this approach as it is required to configure the GW nodes with the Registry DB which can impact the performance.
+
+<br/>
+
+## Class Mediator: OAuth Mediator
+
+In this section, we will be looking into a custom class mediator implementation developed especially to cater to the requirement on integrating OAuth2 Protected endpoint with the WSO2 API Manager.
+
+You can find the complete implementation and the source of the OAuth Mediator (class mediator) in [GitHub](https://github.com/athiththan11/wso2-oauth-mediator).
+
+<Reference 
+    title="WSO2 OAuth Mediator" 
+    description="WSO2 OAuth Mediator"
+    hyperlink="https://github.com/athiththan11/wso2-oauth-mediator" 
+/>
+
+Clone the project and build it by executing the following command from the root directory of the project
+
+```bash
+mvn clean package
+```
+
+Copy and place the built JAR Artifact inside the `<APIM>/repository/components/lib` directory. Then create a JSON file named `wso2-oauth-mediator.json` with the following structure and configure the Authorization server’s Token endpoint and the credentials
+
+```json
+[
+     {
+         "id": "EP1",
+         "tokenApiUrl": "https://localhost:9443/oauth2/token",
+         "apiKey": "1234567890",
+         "apiSecret": "0987654321",
+         "username": "admin",
+         "password": "admin",
+         "grantType": "client_credentials",
+         "scope": "default",
+         "tokenRefreshInterval": 20
+     }
+]
+```
+
+Place the `wso2-oauth-mediator.json` inside the `<APIM>/repository/conf` directory and restart the server to take effect on the changes.
+
+🚀 After a successful restart, create an in-sequence for the protected API and define the class mediator inside the sequence to execute and acquire the token
+
+```xml
+<sequence xmlns="http://ws.apache.org/ns/synapse" name="oauth-sequence">
+    <class name = "org.wso2.apim.mediators.oauth.OAuthMediator">
+        <property name="endpointId" value="EP1" />
+    </class>
+</sequence>
+```
+
+## 🎉 Voila!!! 🎉
+
+We have now successfully slid through the approaches on integrating OAuth2 Protected endpoint with the WSO2 API Manager 👏
+
+**Happy Stacking !!!** 🤘 ✌️
+
+<Reference 
+    title="WSO2 OAuth Mediator" 
+    description="WSO2 OAuth Mediator"
+    hyperlink="https://github.com/athiththan11/wso2-oauth-mediator" 
+/>
