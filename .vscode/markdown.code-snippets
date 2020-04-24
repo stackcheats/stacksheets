@@ -1,16 +1,20 @@
 {
-    "Reference Element": {
-        "scope": "markdown,react-markdown",
-        "prefix": "reference",
-        "body": [
-            "<Reference\n\ttitle='$1'\n\tdescription='$2'\n\thyperlink='$3'\n/>"
-        ],
-        "description": "Reference Element"
-    },
-    "Gist Element": {
-        "scope": "markdown,react-markdown",
-        "prefix": "gist",
-        "body": "`gist:$1/$2#$3`",
-        "description": "Gist Element"
-    }
+	"Reference Element": {
+		"scope": "markdown,react-markdown",
+		"prefix": "reference",
+		"body": ["<Reference\n\ttitle='$1'\n\tdescription='$2'\n\thyperlink='$3'\n/>"],
+		"description": "Reference Element"
+	},
+	"Frontmatter Element": {
+		"scope": "markdown,react-markdown",
+		"prefix": "frontmatter",
+		"body": "---\ntitle: $1\ndate: '$2'\nintro: '$3'\nshort: $4\nmedium: $5\n\ntags: [$6]\nseo: '$7'\nbgcolor: '$8'\n---",
+		"description": "Frontmatter Element"
+	},
+	"Gist Element": {
+		"scope": "markdown,react-markdown",
+		"prefix": "gist",
+		"body": "`gist:$1/$2#$3`",
+		"description": "Gist Element"
+	}
 }
