@@ -1,0 +1,114 @@
+---
+title: 'Retrieve (Custom) API Properties'
+date: '2020-09-26'
+intro: 'Access Custom API Properties in Mediation Sequences'
+short: Access Custom API Properties from Mediation
+
+tags: ['wso2', 'mediator', 'synapse-sequence', 'api-properties']
+seo: 'A demo guide accessing the custom API properties from mediation sequences in WSO2 API Manager'
+cheat: true
+---
+
+## Stratagem
+
+As out-of-the-box, the WSO2 API Manager supports adding and creating custom API properties. You can learn more about managing custom API properties from [here](https://docs.wso2.com/display/AM260/Adding+Custom+Properties+to+APIs). In this cheat, we will be looking at how to access these custom API properties from mediation sequences.
+
+For demo, we have introduced a custom property named `transparent-token` in one of our published API, and we have a requirement to log this property in the logs whenever this API is invoked.
+
+> **Quick Note** 
+> 
+> The following illustrations are developed considering an All-In-One deployment environment of the API Manager server. In a distributed environment, the Gateway component will not have access to the registry space of the Publisher component unless it is shared and configured under the `master-datasources.xml` and `registry.xml`.
+
+<CodeWave>
+
+```xml
+<sequence name="custom-sequence" 
+  xmlns="http://ws.apache.org/ns/synapse">
+  <log level="custom">
+      <property 
+        name="prop" 
+        value="value-to-be-printed" 
+      />
+  </log>
+</sequence>
+```
+
+All introduced custom API properties are stored and persisted inside the local `registry` of the API Manager. We are going to implement a mediation sequence to retrieve our `transparent-token` custom property from the local `registry` space of the API Manager. 
+
+Since, our requirement is to only log the property, we are going to start implementing a custom mediation sequence with a simple log mediator.
+
+```xml
+<sequence name="custom-sequence" 
+  xmlns="http://ws.apache.org/ns/synapse">
+  <log level="custom">
+      <property 
+        name="prop" 
+        expression="get-property('registry')" 
+      />
+  </log>
+</sequence>
+```
+
+Change the log mediator to use `expression` in order to use the `get-property()` method to retrieve our custom API property. As the introduced custom property is available in the `registry` space, we are going to specify the scope of our `get-property()` with the `registry` scope.
+
+```xml
+fn:concat(
+  'gov:/apimgt/applicationdata/provider/',
+  $ctx:api.ut.apiPublisher, '/',
+  $ctx:api.ut.api, '/',
+  $ctx:api.ut.version, '/',
+  'api@api_meta.transparent-token'
+)
+```
+
+Now let's construct the registry path to access our `transparent-token` custom property. The registry path is constructed with the use of existing context properties. The `fn:concat` function is used to join the strings and the properties to build a complete registry path.
+
+Following are the usages of the specified context properties
+
+- `$ctx:api.ut.apiPublisher`: Publisher of the API
+- `$ctx:api.ut.api`: API name
+- `$ctx:api.ut.version`: API version
+
+```xml
+<sequence name="custom-sequence" 
+  xmlns="http://ws.apache.org/ns/synapse">
+  <log level="custom">
+      <property 
+        name="prop" 
+        expression="get-property('registry', 
+          fn:concat(
+            'gov:/apimgt/applicationdata/provider/',
+            $ctx:api.ut.apiPublisher, '/',
+            $ctx:api.ut.api, '/',
+            $ctx:api.ut.version, '/',
+            'api@api_meta.transparent-token'
+          ))"
+      />
+  </log>
+</sequence>
+```
+
+We have now successfully developed a custom mediation sequence to retrieve our custom API property from the `registry` space and to print the value in the logs. 
+
+Upload the sequence as an `in-mediation` sequence to the API from the Publisher portal and, Save and Publish, Invoke and check the logs.
+
+</CodeWave>
+
+Given below is the complete Synapse sequence (`in-sequence`), we developed to access our custom property named `transparent-token` from the local `registry` space of the API Manager.
+
+```xml
+<sequence name="custom-sequence" xmlns="http://ws.apache.org/ns/synapse">
+  <log level="custom">
+      <property 
+        name="prop"
+        expression="get-property('registry', 
+          fn:concat(
+            'gov:/apimgt/applicationdata/provider/',
+            $ctx:api.ut.apiPublisher, '/',
+            $ctx:api.ut.api, '/',
+            $ctx:api.ut.version, '/',
+            'api@api_meta.transparent-token'
+          ))" />
+  </log>
+</sequence>
+```
