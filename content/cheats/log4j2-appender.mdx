@@ -1,0 +1,110 @@
+---
+title: 'Log4j2 Appenders'
+date: '2021-03-13'
+intro: 'Configure Log4j2 Appenders in WSO2 API Manager v3.2.0'
+short: 'Configure Log4j2 Appenders in WSO2 API Manager'
+
+tags: ['wso2', 'log4j2']
+seo: 'Configure a custom log4j2 appender to log Synapse Wire logs in a separate log'
+cheat: true
+---
+
+## Stratagem
+
+WSO2 API Manager now supports (from `v3.0.0` onwards) Log4j2 to manage logs and appenders. In this cheat, we will be looking at how to configure a custom appender for a simple requirement.
+
+The requirement is to log the Synapse Wire logs in a seperate log file. So, first, lets enable the `Synapse Wire` `DEBUG` logs in the API Manager server.
+
+> The following configurations and steps are verified in API Manager `v3.0.0`, `v3.1.0`, and `v3.2.0` environments
+
+<CodeWave>
+
+```yaml
+logger.synapse-wire.name = org.apache.synapse.transport.http.wire
+logger.synapse-wire.level = DEBUG
+
+# add to the loggers
+loggers = synapse-wire, ...
+``` 
+
+To enable the Synapse Wire logs in API Manager server, navigate to `<apim>/repository/conf` directory and open the `log4j2.properties`. Then, add the mentioned properties (if not already exist) and set the `DEBUG` level.
+
+Then, add the `synapse-wire` keyword to the `loggers` as mentioned. Refer to [Enable Gateway Wire Logs](https://apim.docs.wso2.com/en/latest/administer/logging-and-monitoring/logging/setting-up-logging/#enable-gateway-wire-logs) for more info.
+
+```yaml
+appender.WIRE_LOG.type = RollingFile
+appender.WIRE_LOG.name = WIRE_LOG
+appender.WIRE_LOG.fileName 
+    = ${sys:carbon.home}/repository/logs/wire.log
+appender.WIRE_LOG.filePattern 
+    = ${sys:carbon.home}/repository/logs/wire-%d{MM-dd-yyyy}.log
+appender.WIRE_LOG.layout.type = PatternLayout
+appender.WIRE_LOG.layout.pattern 
+    = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
+appender.WIRE_LOG.policies.type = Policies
+appender.WIRE_LOG.policies.time.type = TimeBasedTriggeringPolicy
+appender.WIRE_LOG.policies.time.interval = 1
+appender.WIRE_LOG.policies.time.modulate = true
+appender.WIRE_LOG.policies.size.type = SizeBasedTriggeringPolicy
+appender.WIRE_LOG.policies.size.size = 10MB
+
+# add to the appenders
+appenders = WIRE_LOG, ...
+```
+
+Now, let's introduce a Log4j2 appender to log the `Synapse Wire` to a separate log file.
+
+Given is a sample Log4j2 Appender configuration with RollingFile. The presented configuration contains the basic set of patterns and layouts to print logs. You can further enhance the configurations according to your need.
+
+Once the appender is configured, the Appender name needs to be added to the `appenders` property in the `log4j2.properties`.
+
+```yaml
+logger.synapse-wire.name = org.apache.synapse.transport.http.wire
+logger.synapse-wire.level = DEBUG
+
+# configure with the appender
+logger.synapse-wire.appenderRef.WIRE_LOG.ref = WIRE_LOG
+logger.synapse-wire.additivity = false
+```
+
+At last, configure the `synapse-wire` logger configuration with the created `WIRE_LOG` appender as given.
+
+Once the configurations are saved, we will see a new log file created with the name `wire.log` inside the `<apim>/repository/logs` directory containing the Wire logs.
+
+</CodeWave>
+
+We have now successfully configured a Log4j2 Appender to create and log the `Synapse Wire` `DEBUG` logs in a separate file named `wire`.
+
+The complete set of log4j2 configurations that we introduced and used in this cheat is given below.
+
+```yaml
+
+# appender declaration
+appenders = WIRE_LOG, ...
+
+# custom appender
+appender.WIRE_LOG.type = RollingFile
+appender.WIRE_LOG.name = WIRE_LOG
+appender.WIRE_LOG.fileName = ${sys:carbon.home}/repository/logs/wire.log
+appender.WIRE_LOG.filePattern = ${sys:carbon.home}/repository/logs/wire-%d{MM-dd-yyyy}.log
+appender.WIRE_LOG.layout.type = PatternLayout
+appender.WIRE_LOG.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
+appender.WIRE_LOG.policies.type = Policies
+appender.WIRE_LOG.policies.time.type = TimeBasedTriggeringPolicy
+appender.WIRE_LOG.policies.time.interval = 1
+appender.WIRE_LOG.policies.time.modulate = true
+appender.WIRE_LOG.policies.size.type = SizeBasedTriggeringPolicy
+appender.WIRE_LOG.policies.size.size = 10MB
+
+# engaging the synapse-wire logger
+loggers = synapse-wire, ...
+
+# enabling Synapse Wire DEBUG
+logger.synapse-wire.name = org.apache.synapse.transport.http.wire
+logger.synapse-wire.level = DEBUG
+
+# configuring the logger with the appender
+logger.synapse-wire.appenderRef.WIRE_LOG.ref = WIRE_LOG
+logger.synapse-wire.additivity = false
+
+```
