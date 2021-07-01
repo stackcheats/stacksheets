@@ -1,0 +1,130 @@
+---
+title: 'Preserve Authorization Header in WSO2 API Manager'
+date: '2021-04-03'
+intro: 'Preserve and Send the Authorization Header to Backend Services'
+short: 'Preserve and Send the Authorization Header to Backend Services'
+medium: https://athiththan11.medium.com/preserve-authorization-header-in-wso2-api-manager-e9469e43d1c0
+
+tags: ['wso2', 'wso2-api-manager', 'handlers']
+seo: 'A guide on preserving and sending the Authorization Header to backend services in WSO2 API Manager using custom handlers'
+bgcolor: '#c9daf8'
+---
+
+## Greetings Everyone!!! 👋
+
+In this medium, I will be walking-through a solution to preserve and send the Authorization Header to the Backend service at the (per) API level.
+
+APIs that are published through the WSO2 API Manager is protected by either OAuth2, Basic, or API Key tokens. As out-of-the-box, the API Manager server removes the incoming Authorization Header during the token validation process, so that the Backend services will never know the actual Access Token used to invoke the API in the API Manager.
+
+The API Manager has a global configuration to enable and disable the removal of the Authorization Header. The configuration can be found under the `api-manager.xml` of the API Manager server.
+
+```xml
+<RemoveOAuthHeadersFromOutMessage>true</RemoveOAuthHeadersFromOutMessage>
+```
+
+and the respective TOML configuration will be as following
+
+```toml
+[apim.oauth_config]
+enable_outbound_auth_header = false
+```
+
+But, let’s say, we have a requirement, where we only need to pass the Authorization Header presented for a specific API and not for others. In such scenarios, as out-of-the-box, there is no direct solution to achieve this requirement. So, let’s see how we can achieve this requirement with minimal customizations.
+
+To make it easy, I have already developed a custom handler to extract and preserve the Authorization header in the message context. Given below is the custom handler implementation to preserve the Authorization header in the message context and then to pass it to the Backend service with the help of a mediation sequence.
+
+Let’s get more understanding on how they work...
+
+<Reference
+    title='Preserve Auth Header Handler'
+    description='A Custom Handler to Preserve and Pass the Auth Header to BE in WSO2 APIM'
+    hyperlink='https://github.com/athiththan11/Preserve-Auth-Header-Handler'
+/>
+
+## ✋ How does it work?
+
+The custom handler is implemented to engage and extract the Authorization header during an API invocation through the WSO2 API Manager Gateway. The handler extracts the Authorization header from the Transport Headers and saves it to the Message Context with a custom Key-Value pair.
+
+Then, a global-in-mediation-sequence is added to the Gateway node, to check whether the custom Key-Value pair exists in the context. If exists, the value is retrieved from the context and set back as an Authorization header, and sent to the Backend service.
+
+You can find a sample global-in mediation sequence under the `example` directory of the above-shared repository [Global Sequence](https://github.com/athiththan11/Preserve-Auth-Header-Handler/blob/main/example/global--in.xml). 👌
+
+## ✋ Configure API Manager
+
+Let’s go through how to configure the WSO2 API Manager to engage this handler and perform the trick.
+
+First, clone the shared repository, and build the project using the following command
+
+> The repository contains the source and dependencies supported to WSO2 API Manager v3.1.0
+
+<Reference
+    title='Preserve Auth Header Handler'
+    description='A Custom Handler to Preserve and Pass the Auth Header to BE in WSO2 APIM'
+    hyperlink='https://github.com/athiththan11/Preserve-Auth-Header-Handler'
+/>
+
+```shell
+mvn clean package
+```
+
+Once, the build is done successfully, copy the built JAR artifact from the `<project>/target` directory and place it inside `<apim>/repository/components/lib` directory.
+
+Next, we have to configure the `velocity_template.xml` of the API Manager to engage the handler when the API is published to the Gateway nodes. To do so, we need to alter the existing `<apim>/repository/resources/api_templates/velocity_template.xml` with the following segment.
+
+```xml
+...
+<handlers xmlns="http://ws.apache.org/ns/synapse">
+#foreach($handler in $handlers)
+  #if($handler.className == 'org.wso2.carbon.apimgt.gateway.handlers.security.APIAuthenticationHandler')      
+    #if($apiObj.additionalProperties.get('PreserveAuthHeader') == true)
+    <handler class="com.sample.handlers.PreserveAuthHeaderHandler">            
+    #if($handler.hasProperties())
+    #set ($tempMap = $handler.getProperties() )
+      #foreach($property in $tempMap.entrySet())
+        #if($property.key == 'AuthorizationHeader')
+        <property name="$!property.key" value="$!property.value" />                
+        #end
+      #end
+    #end
+    </handler>
+    #end
+  #end
+...
+```
+
+The above-segment introduces a condition to check whether an API Custom Property has been introduced with the name of `PreserveAuthHeader`. If yes, then the custom handler will be engaged and listed under the handlers section along with the default shipped handlers.
+
+Next, we have to add a global-in mediation sequence to read the custom key-value pair property from the context and to set the Authorization header back. Given below is a sample global-in mediation sequence and you can find the exact sequence inside the `example` directory of the shared repository.
+
+```xml
+<sequence xmlns="http://ws.apache.org/ns/synapse" name="WSO2AM--Ext--In">
+  <!-- a custom log to print the header content -->
+  <log level="custom">
+    <property name="Extracted Auth Header" 
+expression="get-property('PRESERVE_AUTH_HEADER_HANDLER_TOKEN')" />
+  </log>
+  <!-- setting back the Auth header if property exists-->
+  <filter 
+    xpath="get-property('PRESERVE_AUTH_HEADER_HANDLER_TOKEN')">
+    <property name="Authorization" scope="transport" expression="get-property('PRESERVE_AUTH_HEADER_HANDLER_TOKEN')" />     
+  </filter>
+</sequence>
+```
+
+Once the configurations are done, start the API Manager server and perform the following
+
+- Log-in to the Publisher portal
+- Create a new API or edit an existing API that needs to pass the Authorization header to the Backend
+- Navigate to the `Properties` menu of the respective API and add the following custom property
+    - `PreserveAuthHeader` : `true`
+- And save the API
+
+With the above-made configurations, now we will be able to see that our custom handler getting engaged with the respective API.
+
+We can verify this by navigating to the `<apim>/repository/deployment/server/syanpse-configs/default/api` directory and opening up the respective API Synapse artifact. There, under the handlers section, our custom `PreserveAuthHandler` will be engaged prior to the default `APIAuthenticationHandler`.
+
+## Voila!!! 🎉 🎊 🎉
+
+We have now successfully configured the API Manager server to preserve and send the Authorization header to the Backend service (per) API level.
+
+## Happy Stacking!!! 😎
